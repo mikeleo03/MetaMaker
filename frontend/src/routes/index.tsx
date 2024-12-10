@@ -5,11 +5,11 @@ import { Navbar, Footer } from "@/components";
 
 const MainLayout = () => {
     return (
-        <>
+        <div className="bg-[#19181B]">
             <Navbar />
             <Outlet />
             <Footer />
-        </>
+        </div>
     );
 };
 
