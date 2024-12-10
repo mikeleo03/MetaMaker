@@ -90,46 +90,71 @@ const Home: React.FC = () => {
         [],
     );
 
-    if (init) {
-        return (
-            <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-10vh] bg-[#19181B] text-white relative overflow-hidden">
-                {/* Hero Section */}
-                <div className="flex flex-col justify-center items-center h-[80vh] mt-[10vh] w-full relative z-10">
-                    <div className="text-5xl font-bold pb-2">Unlock the Future of Game Creation,</div>
-                    <div className="text-5xl font-bold pb-7">Governance, and Ownership!</div>
-                    <div className="text-xl pb-1">MetaMaker is a blockchain platform where players and developers collaborate to</div>
-                    <div className="text-xl">shape, control, and own immersive game experiences.</div>
-                </div>
+    return (
+        <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-13vh] bg-[#19181B] text-white relative overflow-hidden">
+            {/* Hero Section */}
+            <div className="flex flex-col justify-center items-center h-[80vh] mt-[13vh] w-full relative z-10">
+                <div className="rounded-3xl border font-semibold p-2 px-6 mb-8 border-white/10 bg-white/10">🙋 Propose your game assets now!</div>
+                <div className="text-5xl font-bold pb-2">Unlock the Future of Game Creation,</div>
+                <div className="text-5xl font-bold pb-7">Governance, and Ownership!</div>
+                <div className="text-xl pb-1">MetaMaker is a blockchain platform where players and developers collaborate to</div>
+                <div className="text-xl">shape, control, and own immersive game experiences.</div>
+            </div>
 
-                {/* Glassmorphic Ornaments */}
-                <div
-                    className="absolute top-[-100px] left-1/2 transform -translate-x-1/2 w-[500px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl"
-                    style={{
-                        background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
-                    }}
-                ></div>
-                <div
-                    className="absolute bottom-[-150px] left-[-150px] w-[400px] h-[400px] bg-purple-500 opacity-30 rounded-full blur-2xl"
-                    style={{
-                        background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
-                    }}
-                ></div>
-                <div
-                    className="absolute bottom-[-150px] right-[-200px] w-[400px] h-[400px] bg-purple-500 opacity-30 rounded-full blur-2xl"
-                    style={{
-                        background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
-                    }}
-                ></div>
-                <Particles
-                    id="tsparticles"
-                    particlesLoaded={particlesLoaded}
-                    options={options}
-                />
-            </main>
-        );
-    }
+            {/* Glassmorphic Ornaments */}
+            <div
+                className="absolute top-[-250px] left-1/2 transform -translate-x-1/2 w-[800px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-1"
+                style={{
+                    background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
+                }}
+            ></div>
+            <div
+                className="absolute bottom-[-150px] left-[-150px] w-[350px] h-[375px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-2"
+                style={{
+                    background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
+                }}
+            ></div>
+            <div
+                className="absolute bottom-[-150px] right-[-150px] w-[300px] h-[300px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-3"
+                style={{
+                    background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
+                }}
+            ></div>
 
-    return <></>;
+            {/* Shine Animation */}
+            <style>{`
+                @keyframes shineFade {
+                    0% {
+                        opacity: 0.3;
+                    }
+                    50% {
+                        opacity: 0.4;
+                    }
+                    100% {
+                        opacity: 0.3;
+                    }
+                }
+                .shine-animation {
+                    animation: shineFade 5s infinite;
+                }
+                .delay-1 {
+                    animation-delay: 0s;
+                }
+                .delay-2 {
+                    animation-delay: 1.5s;
+                }
+                .delay-3 {
+                    animation-delay: 3s;
+                }
+            `}</style>
+
+            {init ? <Particles
+                id="tsparticles"
+                particlesLoaded={particlesLoaded}
+                options={options}
+            /> : <></>}
+        </main>
+    );
 };
 
 export default Home;
