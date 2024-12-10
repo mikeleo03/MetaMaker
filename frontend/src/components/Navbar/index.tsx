@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
                 </div>
 
                 {/* Nav Links */}
-                <div className="hidden md:flex space-x-10 backdrop-blur-md shadow-lg font-semibold border-[.25px] border-[#37334B] rounded-3xl p-2 px-8">
+                <div className="hidden md:flex space-x-10 bg-[#2D2841] backdrop-blur-md shadow-lg font-semibold border-[.25px] border-[#37334B] rounded-3xl p-2 px-8">
                     <a
                         href="/"
                         className="hover:text-[#8B5CF4] transition duration-300"
