@@ -1,4 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import {
+    type Container,
+    type ISourceOptions,
+    MoveDirection,
+    OutMode,
+} from "@tsparticles/engine";
+import { loadSlim } from "@tsparticles/slim";
 import { motion } from 'framer-motion';
 import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium.jpg"
@@ -36,9 +44,83 @@ const gameAssets: GameAsset[] = [
 ];
 
 const Vote: React.FC = () => {
+    const [init, setInit] = useState(false);  // Particles
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [remainingTime, setRemainingTime] = useState(300);
+
+    // Particles useEffect
+    useEffect(() => {
+        if (!init) {
+            initParticlesEngine(async (engine) => {
+                await loadSlim(engine);
+            }).then(() => {
+                setInit(true);
+            });
+        }
+    }, [init]);
+
+    const particlesLoaded = async (container?: Container): Promise<void> => {
+        console.log(container);
+    };
+
+    const options: ISourceOptions = useMemo(
+        () => ({
+            fpsLimit: 120,
+            interactivity: {
+                events: {
+                    onClick: {
+                        enable: true,
+                        mode: "push",
+                    },
+                    onHover: {
+                        enable: true,
+                        mode: "repulse",
+                    },
+                },
+                modes: {
+                    push: {
+                        quantity: 4,
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4,
+                    },
+                },
+            },
+            particles: {
+                color: {
+                    value: "#ffffff",
+                },
+                move: {
+                    direction: MoveDirection.none,
+                    enable: true,
+                    outModes: {
+                        default: OutMode.out,
+                    },
+                    random: false,
+                    speed: 1,
+                    straight: false,
+                },
+                number: {
+                    density: {
+                        enable: true,
+                    },
+                    value: 80,
+                },
+                opacity: {
+                    value: 0.5,
+                },
+                shape: {
+                    type: "circle",
+                },
+                size: {
+                    value: { min: 1, max: 5 },
+                },
+            },
+            // detectRetina: true,
+        }), [init]
+    );
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -92,9 +174,9 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Advice Vote */}
-            <div className="absolute mt-[11vh] top-10 left-16 flex flex-col items-start pb-8 justify-start text-white backdrop-blur">
-                <div className='text-5xl font-bold mb-1'>Vote Your Favorite</div>
-                <div className='text-5xl font-bold mb-3'>Game Asset!</div>
+            <div className="absolute mt-[11vh] z-50 top-10 left-16 flex flex-col items-start pb-8 justify-start text-white backdrop-blur">
+                <div className='glow text-5xl font-bold mb-1'>Vote Your Favorite</div>
+                <div className='glow text-5xl font-bold mb-3'>Game Asset!</div>
                 <div className='text-xl mb-0'>Make your voice count—vote for the</div>
                 <div className='text-xl'>game asset that stands out!</div>
             </div>
@@ -130,7 +212,7 @@ const Vote: React.FC = () => {
                 <motion.img
                     src={currentAsset.image}
                     alt={currentAsset.title}
-                    className="w-60 h-60 object-contain mx-8"
+                    className="w-60 z-50 object-contain mx-8"
                     initial={{ y: 0 }}
                     animate={{ y: [0, -20, 0] }}
                     transition={{ repeat: Infinity, duration: 2 }}
@@ -197,6 +279,15 @@ const Vote: React.FC = () => {
                     animation-delay: 3s;
                 }
             `}</style>
+
+            {/* Particles */}
+            {init && (
+                <Particles
+                    id="tsparticles"
+                    particlesLoaded={particlesLoaded}
+                    options={options}
+                />
+            )}
         </div>
     );
 };
