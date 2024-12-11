@@ -12,6 +12,8 @@ import { ParallaxText } from "@/components";
 import img1 from "@/assets/images/img1.jpg";
 import img2 from "@/assets/images/img2.jpg";
 import img3 from "@/assets/images/img3.jpg";
+import scroll from "@/assets/gifs/scroll.gif";
+import { Button } from "@/components/ui/button";
 
 const Home: React.FC = () => {
     const [init, setInit] = useState(false);
@@ -96,7 +98,6 @@ const Home: React.FC = () => {
     );
 
     const [expandedIndex, setExpandedIndex] = useState(0);
-    const scrollRef = useRef(null);
 
     const items = [
         {
@@ -117,6 +118,12 @@ const Home: React.FC = () => {
     ];
 
     const resetAccordion = () => setExpandedIndex(0);
+    const openingSectionRef = useRef<HTMLDivElement>(null);
+    const scrollToOpeningSection = () => {
+        if (openingSectionRef.current) {
+            openingSectionRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
 
     return (
         <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-13vh] bg-[#19181B] text-white relative overflow-hidden">
@@ -127,7 +134,7 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
             >
-                <div className="flex flex-col justify-center items-center h-[90vh] mt-[10vh] w-full relative z-10">
+                <div className="flex flex-col justify-center items-center h-[90vh] mt-[5vh] w-full relative z-10">
                     <div className="rounded-3xl border font-semibold p-2 px-6 mb-8 border-white/10 bg-white/10">🙋 Propose your game assets now!</div>
                     <div className="text-5xl font-bold pb-2">Unlock the Future of Game Creation,</div>
                     <div className="text-5xl font-bold pb-7">Governance, and Ownership!</div>
@@ -156,12 +163,19 @@ const Home: React.FC = () => {
                 }}
             ></div>
 
-            <div className="relative w-[100vw]">
-                <ParallaxText baseVelocity={-5}>MetaMaker</ParallaxText>
-                <ParallaxText baseVelocity={5}>Blockchain</ParallaxText>
+            <Button 
+                onClick={scrollToOpeningSection}
+                className="h-0 p-0"
+            >
+                <img className="absolute top-[500px] w-[100px] h-[100px] z-50" src={scroll}></img>
+            </Button>
+
+            <div className="relative w-[100vw] rotate-3 mt-3">
+                <ParallaxText baseVelocity={-5}>MetaMaker  •</ParallaxText>
+                <ParallaxText baseVelocity={5}>Blockchain  •</ParallaxText>
             </div>
 
-            <div ref={scrollRef} className="bg-gradient-to-t from-black mt-10 via-black to-transparent p-20 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
+            <div ref={openingSectionRef} className="bg-gradient-to-t from-black mt-10 via-black to-transparent p-20 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
                 <motion.div
                     className="box"
                     initial={{ opacity: 0, scale: 0, y: 300 }}
