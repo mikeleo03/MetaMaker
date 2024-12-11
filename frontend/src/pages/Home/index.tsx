@@ -9,16 +9,17 @@ import {
 import { loadSlim } from "@tsparticles/slim";
 import { motion } from "framer-motion";
 import { ParallaxText } from "@/components";
-import img1 from "@/assets/images/img1.jpg";
-import img2 from "@/assets/images/img2.jpg";
-import img3 from "@/assets/images/img3.jpg";
+import { featureItems } from "@/constant";
 import scroll from "@/assets/gifs/scroll.gif";
 import { Button } from "@/components/ui/button";
 
 const Home: React.FC = () => {
-    const [init, setInit] = useState(false);
+    const [init, setInit] = useState(false);  // Particles
+    const [expandedIndex, setExpandedIndex] = useState(0); // Expanded intro
+    const resetAccordion = () => setExpandedIndex(0); // Accordion position rest
+    const openingSectionRef = useRef<HTMLDivElement>(null); // Scroll ref
 
-    // this should be run only once per application lifetime
+    // Particles useEffect
     useEffect(() => {
         initParticlesEngine(async (engine) => {
             await loadSlim(engine);
@@ -93,32 +94,9 @@ const Home: React.FC = () => {
                 },
             },
             detectRetina: true,
-        }),
-        [],
+        }), []
     );
 
-    const [expandedIndex, setExpandedIndex] = useState(0);
-
-    const items = [
-        {
-            title: 'Empower Collaborative Decision-Making',
-            content: 'Propose, vote, and decide the future of games with time-bound, fair, and transparent voting powered by blockchain.',
-            image: img1,
-        },
-        {
-            title: 'Manage Game Assets Seamlessly',
-            content: 'Submit, validate, and vote on game assets with clear timelines and secure integration through Google Drive API.',
-            image: img2,
-        },
-        {
-            title: 'Transparent Blockchain Integration',
-            content: 'Winning assets and decisions are recorded on-chain, ensuring transparency and credibility while connecting with external tools like GitHub.',
-            image: img3,
-        },
-    ];
-
-    const resetAccordion = () => setExpandedIndex(0);
-    const openingSectionRef = useRef<HTMLDivElement>(null);
     const scrollToOpeningSection = () => {
         if (openingSectionRef.current) {
             openingSectionRef.current.scrollIntoView({ behavior: "smooth" });
@@ -188,7 +166,7 @@ const Home: React.FC = () => {
                         className="flex w-full h-full overflow-hidden rounded-lg"
                         onMouseLeave={resetAccordion}
                     >
-                        {items.map((item, index) => (
+                        {featureItems.map((item, index) => (
                             <motion.div
                                 key={index}
                                 className={`flex-1 h-[55vh] mx-4 relative rounded-xl cursor-pointer border-4 overflow-hidden ${expandedIndex === index ? 'flex-[2]' : ''}`}
