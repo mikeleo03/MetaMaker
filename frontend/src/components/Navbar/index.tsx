@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
                         About
                     </a>
                     <a
-                        href="/"
+                        href="/vote"
                         className="hover:text-[#8B5CF4] transition duration-300"
                     >
                         Vote

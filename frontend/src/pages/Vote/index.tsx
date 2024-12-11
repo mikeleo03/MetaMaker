@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import {
-    type Container,
-    type ISourceOptions,
-    MoveDirection,
-    OutMode,
-} from "@tsparticles/engine";
-import { loadSlim } from "@tsparticles/slim";
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { LuAlarmClock } from "react-icons/lu";
 import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium.jpg"
+import { Particles } from '@/components';
 
 interface GameAsset {
     id: number;
@@ -44,83 +38,9 @@ const gameAssets: GameAsset[] = [
 ];
 
 const Vote: React.FC = () => {
-    const [init, setInit] = useState(false);  // Particles
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [remainingTime, setRemainingTime] = useState(300);
-
-    // Particles useEffect
-    useEffect(() => {
-        if (!init) {
-            initParticlesEngine(async (engine) => {
-                await loadSlim(engine);
-            }).then(() => {
-                setInit(true);
-            });
-        }
-    }, [init]);
-
-    const particlesLoaded = async (container?: Container): Promise<void> => {
-        console.log(container);
-    };
-
-    const options: ISourceOptions = useMemo(
-        () => ({
-            fpsLimit: 120,
-            interactivity: {
-                events: {
-                    onClick: {
-                        enable: true,
-                        mode: "push",
-                    },
-                    onHover: {
-                        enable: true,
-                        mode: "repulse",
-                    },
-                },
-                modes: {
-                    push: {
-                        quantity: 4,
-                    },
-                    repulse: {
-                        distance: 200,
-                        duration: 0.4,
-                    },
-                },
-            },
-            particles: {
-                color: {
-                    value: "#ffffff",
-                },
-                move: {
-                    direction: MoveDirection.none,
-                    enable: true,
-                    outModes: {
-                        default: OutMode.out,
-                    },
-                    random: false,
-                    speed: 1,
-                    straight: false,
-                },
-                number: {
-                    density: {
-                        enable: true,
-                    },
-                    value: 80,
-                },
-                opacity: {
-                    value: 0.5,
-                },
-                shape: {
-                    type: "circle",
-                },
-                size: {
-                    value: { min: 1, max: 5 },
-                },
-            },
-            // detectRetina: true,
-        }), [init]
-    );
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -146,7 +66,7 @@ const Vote: React.FC = () => {
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     };    
 
     const currentAsset = gameAssets[currentIndex];
@@ -174,7 +94,7 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Advice Vote */}
-            <div className="absolute mt-[11vh] z-50 top-10 left-16 flex flex-col items-start pb-8 justify-start text-white backdrop-blur">
+            <div className="absolute mt-[11vh] z-30 top-10 left-16 flex flex-col items-start pr-2 justify-start text-white backdrop-blur">
                 <div className='glow text-5xl font-bold mb-1'>Vote Your Favorite</div>
                 <div className='glow text-5xl font-bold mb-3'>Game Asset!</div>
                 <div className='text-xl mb-0'>Make your voice count—vote for the</div>
@@ -182,7 +102,7 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Countdown Timer */}
-            <div className="absolute bottom-12 left-16 flex flex-col items-start gap-2 z-50 bg-blue-500/10 border border-blue-500 backdrop-blur rounded-lg p-6 text-white">
+            <div className="absolute bottom-12 left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur rounded-lg p-6 px-8 text-white">
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
                     <div className="w-64 bg-gray-800 rounded-full overflow-hidden h-4">
@@ -191,8 +111,8 @@ const Vote: React.FC = () => {
                             style={{ width: `${(remainingTime / 300) * 100}%` }}
                         ></div>
                     </div>
-                    <div className="flex items-center text-white text-lg">
-                        <span className="material-icons mr-2"></span>
+                    <div className="flex items-center text-white text-lg space-x-2">
+                        <span><LuAlarmClock /></span>
                         <span>{formatTime(remainingTime)}</span>
                     </div>
                 </div>
@@ -227,7 +147,7 @@ const Vote: React.FC = () => {
                 </button>
 
                 {/* Glassmorphism Info Section */}
-                <div className="absolute z-50 top-[125px] right-[100px] w-[300px] h-[350px] bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white ml-8">
+                <div className="absolute z-30 top-[125px] right-[100px] w-[300px] h-[350px] bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white ml-8">
                     <h1 className="text-2xl font-bold mb-0">{currentAsset.title}</h1>
                     <p className="mt-2 text-sm">Proposed by: {currentAsset.proposer}</p>
                     <p className="mt-2 text-sm text-gray-300">{currentAsset.description}</p>
@@ -281,13 +201,7 @@ const Vote: React.FC = () => {
             `}</style>
 
             {/* Particles */}
-            {init && (
-                <Particles
-                    id="tsparticles"
-                    particlesLoaded={particlesLoaded}
-                    options={options}
-                />
-            )}
+            <Particles />
         </div>
     );
 };
