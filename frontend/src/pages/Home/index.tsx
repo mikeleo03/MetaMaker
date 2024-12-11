@@ -7,6 +7,7 @@ import {
     OutMode,
 } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
+import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
     const [init, setInit] = useState(false);
@@ -93,13 +94,20 @@ const Home: React.FC = () => {
     return (
         <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-13vh] bg-[#19181B] text-white relative overflow-hidden">
             {/* Hero Section */}
-            <div className="flex flex-col justify-center items-center h-[80vh] mt-[13vh] w-full relative z-10">
-                <div className="rounded-3xl border font-semibold p-2 px-6 mb-8 border-white/10 bg-white/10">🙋 Propose your game assets now!</div>
-                <div className="text-5xl font-bold pb-2">Unlock the Future of Game Creation,</div>
-                <div className="text-5xl font-bold pb-7">Governance, and Ownership!</div>
-                <div className="text-xl pb-1">MetaMaker is a blockchain platform where players and developers collaborate to</div>
-                <div className="text-xl">shape, control, and own immersive game experiences.</div>
-            </div>
+            <motion.div
+                className="box"
+                initial={{ opacity: 0, scale: 0, y: 300 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
+            >
+                <div className="flex flex-col justify-center items-center h-[80vh] mt-[13vh] w-full relative z-10">
+                    <div className="rounded-3xl border font-semibold p-2 px-6 mb-8 border-white/10 bg-white/10">🙋 Propose your game assets now!</div>
+                    <div className="text-5xl font-bold pb-2">Unlock the Future of Game Creation,</div>
+                    <div className="text-5xl font-bold pb-7">Governance, and Ownership!</div>
+                    <div className="text-xl pb-1">MetaMaker is a blockchain platform where players and developers collaborate to</div>
+                    <div className="text-xl">shape, control, and own immersive game experiences.</div>
+                </div>
+            </motion.div>
 
             {/* Glassmorphic Ornaments */}
             <div
