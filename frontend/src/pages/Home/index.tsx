@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import {
     type Container,
@@ -8,6 +8,7 @@ import {
 } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
 import { motion } from "framer-motion";
+import { ParallaxText } from "@/components";
 import img1 from "@/assets/images/img1.jpg";
 import img2 from "@/assets/images/img2.jpg";
 import img3 from "@/assets/images/img3.jpg";
@@ -95,6 +96,7 @@ const Home: React.FC = () => {
     );
 
     const [expandedIndex, setExpandedIndex] = useState(0);
+    const scrollRef = useRef(null);
 
     const items = [
         {
@@ -154,41 +156,53 @@ const Home: React.FC = () => {
                 }}
             ></div>
 
-            <div className="bg-gradient-to-t from-black via-black to-transparent p-20 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
-                <div className="text-3xl font-bold text-start mb-12">What MetaMaker can actually do?</div>
-            
-                <div 
-                    className="flex w-full h-full overflow-hidden rounded-lg"
-                    onMouseLeave={resetAccordion}
+            <div className="relative w-[100vw]">
+                <ParallaxText baseVelocity={-5}>MetaMaker</ParallaxText>
+                <ParallaxText baseVelocity={5}>Blockchain</ParallaxText>
+            </div>
+
+            <div ref={scrollRef} className="bg-gradient-to-t from-black mt-10 via-black to-transparent p-20 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
+                <motion.div
+                    className="box"
+                    initial={{ opacity: 0, scale: 0, y: 300 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
                 >
-                    {items.map((item, index) => (
-                        <motion.div
-                            key={index}
-                            className={`flex-1 h-[55vh] mx-4 relative rounded-xl cursor-pointer border-4 overflow-hidden ${expandedIndex === index ? 'flex-[2]' : ''}`}
-                            onMouseEnter={() => setExpandedIndex(index)}
-                            initial={{ flex: 1 }}
-                            animate={{ flex: expandedIndex === index ? 4 : 1 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <div className={`absolute inset-0 ${expandedIndex === index ? "bg-gradient-to-t from-black via-black to-transparent" : "bg-black/60"} opacity-90`} />
-                            <img src={item.image} className="z-0 h-full w-full object-cover" alt="Illustration" />
-                            <div className="absolute bottom-0 w-full text-start text-white p-6 rounded-b-xl">
-                                {expandedIndex === index && (
-                                    <motion.p
-                                        className="text-lg mt-2"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ type: "linear", duration: 1.25 }}
-                                    >
-                                        <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
-                                        {item.content}
-                                    </motion.p>
-                                )}
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                    <div className="text-3xl font-bold text-start mb-12">What MetaMaker can actually do?</div>
+                
+                    <div 
+                        className="flex w-full h-full overflow-hidden rounded-lg"
+                        onMouseLeave={resetAccordion}
+                    >
+                        {items.map((item, index) => (
+                            <motion.div
+                                key={index}
+                                className={`flex-1 h-[55vh] mx-4 relative rounded-xl cursor-pointer border-4 overflow-hidden ${expandedIndex === index ? 'flex-[2]' : ''}`}
+                                onMouseEnter={() => setExpandedIndex(index)}
+                                initial={{ flex: 1 }}
+                                animate={{ flex: expandedIndex === index ? 4 : 1 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <div className={`absolute inset-0 ${expandedIndex === index ? "bg-gradient-to-t from-black via-black to-transparent" : "bg-black/60"} opacity-90`} />
+                                <img src={item.image} className="z-0 h-full w-full object-cover" alt="Illustration" />
+                                <div className="absolute bottom-0 w-full text-start text-white p-6 rounded-b-xl">
+                                    {expandedIndex === index && (
+                                        <motion.p
+                                            className="text-lg mt-2"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ type: "linear", duration: 1.25 }}
+                                        >
+                                            <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
+                                            {item.content}
+                                        </motion.p>
+                                    )}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
             </div>
 
             {/* Shine Animation */}
