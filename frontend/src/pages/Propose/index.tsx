@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage, FormControl, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,9 +10,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Trash2, Upload } from "lucide-react";
-import image from "@/assets/images/image.png";
+import { FaFileImage } from "react-icons/fa6";
+import { Particles } from "@/components";
+import { LuAlarmClock } from "react-icons/lu";
 
 const Propose: React.FC = () => {
+    const [remainingTime, setRemainingTime] = useState(300);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setRemainingTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+        }, 1000);
+    
+        return () => clearInterval(timer);
+    }, []);
+
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    };
+
     const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100 MB
     const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
@@ -99,7 +117,7 @@ const Propose: React.FC = () => {
     };
 
     return (
-        <main className="flex flex-col w-full min-h-screen bg-[#19181B] md:px-10 px-6 relative overflow-hidden">
+        <main className="flex flex-col w-full min-h-screen bg-[#19181B] relative overflow-hidden">
             {/* Glassmorphic Ornaments */}
             <div
                 className="absolute top-[-250px] left-1/2 transform -translate-x-1/2 w-[800px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-1"
@@ -121,7 +139,33 @@ const Propose: React.FC = () => {
             ></div>
 
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-10 mt-5">
+                {/* Title */}
+                <div className="z-30 top-10 flex flex-col text-center items-center pr-2 justify-center text-white backdrop-blur mt-[30vh] md:mt-[11vh]">
+                    <div className='glow text-4xl md:text-5xl font-bold mb-3.5'>Propose Your Best Game Asset!</div>
+                    <div className='text-xl block mb-0'>Showcase your creativity—submit your best game asset for the community to decide!</div>
+                </div>
+
+                {/* Forms */}
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-10 mt-5 z-30">
+                    {/* Judul Aset */}
+                    <div className="flex flex-col bg-blue-500/10 border border-blue-500 z-2 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 mx-40 text-white">
+                        <div className="flex flex-col h-full md:mx-4">
+                            <div className='text-xl font-bold mb-3'>Remaining Time</div>
+                            <div className='flex items-center space-x-4'>
+                                <div className="w-full bg-gray-800 rounded-full overflow-hidden h-4">
+                                    <div
+                                        className="bg-blue-500 h-full"
+                                        style={{ width: `${(remainingTime / 300) * 100}%` }}
+                                    ></div>
+                                </div>
+                                <div className="flex items-center text-white text-lg space-x-2">
+                                    <span><LuAlarmClock /></span>
+                                    <span>{formatTime(remainingTime)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     {/* Judul Aset */}
                     <div className="flex flex-col bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 mx-40 text-white">
                         <div className="flex flex-col w-full h-full">
@@ -215,14 +259,14 @@ const Propose: React.FC = () => {
                                                     )}
                                                 </label>
                                                 {assetFile && (
-                                                    <div className="w-full h-full mt-4 flex border-main1 border-yellow items-center card-glow-yellow bg-[#F2FBFA] rounded-xl">
-                                                        <div className="p-3 px-4">
-                                                            <img src={image} className="h-full"/>
+                                                    <div className="w-full h-full mt-6 flex border-main1 border-yellow items-center card-glow-yellow bg-white rounded-xl">
+                                                        <div className="w-20 flex items-center justify-center">
+                                                            <FaFileImage size={35} className="text-gray-600" />
                                                         </div>
                                                         <div className="h-full w-1">
-                                                            <Separator className="h-[3.5rem] w-[1.5px] bg-main1"></Separator>
+                                                            <Separator className="h-[3.5rem] w-[1.5px] bg-gray-300"></Separator>
                                                         </div>
-                                                        <div className="w-full h-full px-5 py-3 flex justify-start items-center">
+                                                        <div className="w-full h-full px-5 py-5 flex justify-start items-center">
                                                             <div className="flex w-full items-center flex-col flex-start">
                                                                 <div className="text-sm text-left w-full text-black">
                                                                     {assetUploadProgress != 100 ? 
@@ -232,7 +276,7 @@ const Propose: React.FC = () => {
                                                                 </div>
                                                                 <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
                                                                     <div
-                                                                        className="bg-yellow h-2.5 rounded-full"
+                                                                        className="bg-purple-500 h-2.5 rounded-full"
                                                                         style={{ width: `${assetUploadProgress}%` }}
                                                                     ></div>
                                                                 </div>
@@ -300,6 +344,9 @@ const Propose: React.FC = () => {
                     animation-delay: 3s;
                 }
             `}</style>
+
+            {/* Particles */}
+            <Particles />
         </main>
       );
 };
