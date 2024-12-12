@@ -94,10 +94,10 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Countdown Timer */}
-            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur rounded-lg p-6 md:px-8 text-white">
+            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur md:rounded-lg p-6 md:px-8 pl-10 md:w-auto w-full text-white">
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
-                    <div className="w-64 bg-gray-800 rounded-full overflow-hidden h-4">
+                    <div className="md:w-64 w-52 bg-gray-800 rounded-full overflow-hidden h-4">
                         <div
                             className="bg-blue-500 h-full"
                             style={{ width: `${(remainingTime / 300) * 100}%` }}

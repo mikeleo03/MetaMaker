@@ -55,7 +55,7 @@ const ParticlesComponent: React.FC = () => {
                 density: {
                     enable: true,
                 },
-                value: 80,
+                value: 120,
             },
             opacity: {
                 value: 0.5,

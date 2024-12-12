@@ -4,10 +4,10 @@ import logoWhite from "@/assets/logos/logo.png";
 
 const Navbar: React.FC = () => {
     return (
-        <div className="flex items-center justify-between bg-none p-5 px-8 sticky top-0 z-50 text-white backdrop-blur-md shadow-lg border-b border-white/10">
-            <div className="container mx-auto flex justify-between items-center">
+        <div className="flex items-center justify-between bg-none p-5 px-8 md:px-12 w-full sticky top-0 z-50 text-white backdrop-blur-md shadow-lg border-b border-white/10">
+            <div className="mx-auto flex w-full justify-between items-center">
                 {/* Logo */}
-                <div className="text-xl font-bold">
+                <div className="text-xl font-bold h-full">
                     <Link to="/" className="text-white text-lg flex items-center space-x-2 flex-row transition-transform duration-300 transform hover:scale-105">
                         <img src={logoWhite} className="w-10" alt="logo"></img> 
                         <div className='text-2xl'>MetaMaker</div>
@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
                 <div className="flex space-x-4">
                     <a
                         href="#signup"
-                        className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white py-1.5 px-6 font-semibold rounded-lg transition-transform duration-300 transform hover:scale-105"
+                        className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white md:py-1.5 py-2 md:px-6 px-4 font-semibold rounded-lg transition-transform duration-300 transform hover:scale-105"
                     >
                         Sign up
                     </a>
