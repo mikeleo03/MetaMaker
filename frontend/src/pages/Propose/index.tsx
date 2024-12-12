@@ -117,7 +117,7 @@ const Propose: React.FC = () => {
     };
 
     return (
-        <main className="flex flex-col w-full min-h-screen bg-[#19181B] relative overflow-hidden">
+        <main className="flex flex-col w-full min-h-screen bg-[#19181B] relative overflow-hidden mt-[-13vh]">
             {/* Glassmorphic Ornaments */}
             <div
                 className="absolute top-[-250px] left-1/2 transform -translate-x-1/2 w-[800px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-1"
@@ -126,13 +126,13 @@ const Propose: React.FC = () => {
                 }}
             ></div>
             <div
-                className="absolute top-[250px] top-[400px] left-[-150px] w-[350px] h-[375px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-2"
+                className="absolute top-[250px] top-[400px] left-[60px] w-[500px] h-[475px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-2"
                 style={{
                     background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
                 }}
             ></div>
             <div
-                className="absolute md:top-[400px] top-[1500px] right-[-150px] w-[300px] h-[300px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-3"
+                className="absolute md:top-[850px] top-[1000px] right-[100px] w-[400px] h-[400px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-3"
                 style={{
                     background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
                 }}
@@ -140,7 +140,7 @@ const Propose: React.FC = () => {
 
             <Form {...form}>
                 {/* Title */}
-                <div className="z-30 top-10 flex flex-col text-center items-center pr-2 justify-center text-white backdrop-blur mt-[30vh] md:mt-[11vh]">
+                <div className="z-30 top-10 flex flex-col text-center items-center md:px-0 px-8 justify-center text-white backdrop-blur mb-3 mt-[18vh] md:mt-[20vh]">
                     <div className='glow text-4xl md:text-5xl font-bold mb-3.5'>Propose Your Best Game Asset!</div>
                     <div className='text-xl block mb-0'>Showcase your creativity—submit your best game asset for the community to decide!</div>
                 </div>
@@ -148,7 +148,7 @@ const Propose: React.FC = () => {
                 {/* Forms */}
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-10 mt-5 z-30">
                     {/* Judul Aset */}
-                    <div className="flex flex-col bg-blue-500/10 border border-blue-500 z-2 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 mx-40 text-white">
+                    <div className="flex flex-col bg-blue-500/10 border border-blue-500 z-2 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 md:mx-40 mx-8 text-white">
                         <div className="flex flex-col h-full md:mx-4">
                             <div className='text-xl font-bold mb-3'>Remaining Time</div>
                             <div className='flex items-center space-x-4'>
@@ -167,7 +167,7 @@ const Propose: React.FC = () => {
                     </div>
                     
                     {/* Judul Aset */}
-                    <div className="flex flex-col bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 mx-40 text-white">
+                    <div className="flex flex-col bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 md:mx-40 mx-8 text-white">
                         <div className="flex flex-col w-full h-full">
                             <div className="flex flex-col h-full md:mx-4">
                                 <div className="flex text-3xl font-bold items-center h-full">
@@ -220,9 +220,9 @@ const Propose: React.FC = () => {
                     </div>
             
                     {/* Unggah Aset */}
-                    <div className="flex flex-col bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 mx-40 text-white">
+                    <div className="flex flex-col bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-8 md:my-10 m-6 md:mx-40 mx-8 text-white">
                         <div className='flex flex-col justify-center items-center space-y-3 my-3 md:mx-4'>
-                            <div className="flex text-3xl text-white pt-1 w-full font-semibold justify-start text-start h-full">
+                            <div className="flex text-3xl text-white w-full font-bold justify-start text-start h-full">
                                 Upload File Asset
                             </div>
                             <FormField
