@@ -69,6 +69,22 @@ const Vote: React.FC = () => {
         return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     };    
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'ArrowLeft') {
+            prevAsset();
+        } else if (event.key === 'ArrowRight') {
+            nextAsset();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
     const currentAsset = gameAssets[currentIndex];
 
     return (
@@ -151,10 +167,10 @@ const Vote: React.FC = () => {
                 </div>
 
                 {/* Glassmorphism Info Section */}
-                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] h-[350px] bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white md:ml-8">
-                    <h1 className="text-2xl font-bold mb-0">{currentAsset.title}</h1>
-                    <p className="mt-2 text-sm">Proposed by: {currentAsset.proposer}</p>
-                    <p className="mt-2 text-sm text-gray-300">{currentAsset.description}</p>
+                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white md:ml-8">
+                    <h1 className="text-3xl font-bold mb-0">{currentAsset.title}</h1>
+                    <p className="mt-2">Proposed by: {currentAsset.proposer}</p>
+                    <p className="mt-2 md:text-sm text-gray-300">{currentAsset.description}</p>
                 </div>
             </div>
 

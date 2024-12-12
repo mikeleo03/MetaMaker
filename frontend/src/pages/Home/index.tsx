@@ -166,7 +166,7 @@ const Home: React.FC = () => {
                     <div className="text-4xl font-bold text-start mb-2">
                     What <span className="bg-gradient-to-r from-purple-500 to-white text-transparent bg-clip-text">MetaMaker</span> can actually do?
                     </div>
-                    <div className="text-xl md:mb-12 mb-10 text-start">Discover the powerful features of MetaMaker!</div>
+                    <div className="text-xl mb-10 text-start">Discover the powerful features of MetaMaker!</div>
                 
                     <div 
                         className="flex md:flex-row flex-col w-full md:h-full h-[84vh] overflow-hidden rounded-lg md:space-y-0 space-y-4"
