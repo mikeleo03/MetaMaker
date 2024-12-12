@@ -1,5 +1,5 @@
 import { Outlet, RouteObject, createBrowserRouter } from "react-router-dom";
-import { Home, Vote } from "@/pages";
+import { Home, Propose, Vote } from "@/pages";
 import { Navbar, Footer } from "@/components";
 // import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -29,6 +29,10 @@ const routes: RouteObject[] = [
             {
                 path: "/vote",
                 element: <Vote />,
+            },
+            {
+                path: "/propose",
+                element: <Propose />,
             }
         ],
     },

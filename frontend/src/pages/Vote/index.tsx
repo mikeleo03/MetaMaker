@@ -110,7 +110,8 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Countdown Timer */}
-            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur md:rounded-lg p-6 md:px-8 pl-10 md:w-auto w-full text-white">
+            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur-md md:rounded-lg p-6 md:px-8 pl-10 md:w-auto w-full text-white">
+                {/* <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 backdrop-blur-md md:rounded-lg md:w-auto w-full text-white"> */}
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
                     <div className="md:w-64 w-52 bg-gray-800 rounded-full overflow-hidden h-4">
@@ -167,7 +168,7 @@ const Vote: React.FC = () => {
                 </div>
 
                 {/* Glassmorphism Info Section */}
-                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white md:ml-8">
+                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
                     <h1 className="text-3xl font-bold mb-0">{currentAsset.title}</h1>
                     <p className="mt-2">Proposed by: {currentAsset.proposer}</p>
                     <p className="mt-2 md:text-sm text-gray-300">{currentAsset.description}</p>
