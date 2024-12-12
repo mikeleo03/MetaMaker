@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { LuAlarmClock } from "react-icons/lu";
 import logoWhite from "@/assets/logos/logo.png";
-import podium from "@/assets/images/podium.jpg"
+import podium from "@/assets/images/podium2.jpg"
 import { Particles } from '@/components';
 
 interface GameAsset {

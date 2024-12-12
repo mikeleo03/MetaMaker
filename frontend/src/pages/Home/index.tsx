@@ -13,6 +13,7 @@ import { featureItems } from "@/constant";
 import scroll from "@/assets/gifs/scroll.gif";
 import { Button } from "@/components/ui/button";
 import { PiStarFourFill } from "react-icons/pi";
+import dark from "@/assets/images/darko.jpg"
 
 const Home: React.FC = () => {
     const [init, setInit] = useState(false);  // Particles
@@ -82,7 +83,7 @@ const Home: React.FC = () => {
                     density: {
                         enable: true,
                     },
-                    value: 80,
+                    value: 100,
                 },
                 opacity: {
                     value: 0.5,
@@ -106,6 +107,12 @@ const Home: React.FC = () => {
 
     return (
         <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-13vh] bg-[#19181B] text-white relative overflow-hidden">
+            {/* Podium Light */}
+            <div className="absolute top-0 transform w-screen">
+                <img className="md:block hidden w-screen" src={dark}></img>
+                <img className="md:hidden block h-screen" src={dark}></img>
+            </div>
+            
             {/* Hero Section */}
             <motion.div
                 className="box"
@@ -113,13 +120,58 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
             >
-                <div className="flex flex-col justify-center items-center h-[90vh] mt-[5vh] w-full relative z-10 p-8">
-                    <div className="rounded-3xl border-2 font-semibold p-2 px-6 mb-6 flex items-center border-white/30 bg-white/10"><PiStarFourFill className="mr-3 text-white"/> Propose your game assets now!</div>
-                    <div className="md:text-5xl text-4xl font-bold md:pb-2">Unlock the Future of Game Creation,</div>
-                    <div className="md:text-5xl text-4xl font-bold pb-7">Governance, and Ownership!</div>
-                    <div className="md:text-xl text-lg md:pb-1 md:block hidden">MetaMaker is a blockchain platform where players and developers collaborate to</div>
-                    <div className="md:text-xl text-lg md:block hidden">shape, control, and own immersive game experiences.</div>
-                    <div className="md:text-xl text-lg md:pb-1 md:hidden block">MetaMaker is a blockchain platform where players and developers collaborate to shape, control, and own immersive game experiences.</div>
+                <div className="relative flex flex-col justify-center items-center h-[90vh] mt-[5vh] w-full z-10 p-8">
+                    {/* Call to Action */}
+                    <div className="z-30 rounded-3xl border-2 font-semibold p-2 px-6 mb-6 flex items-center border-white/30 bg-white/10">
+                        <PiStarFourFill className="mr-3 text-white" /> Propose your game assets now!
+                    </div>
+                    <div className="z-30 md:text-5xl text-4xl font-bold md:pb-2">
+                        Unlock the Future of Game Creation,
+                    </div>
+                    <div className="z-30 md:text-5xl text-4xl font-bold pb-7">
+                        Governance, and Ownership!
+                    </div>
+                    <div className="z-30 md:text-xl text-lg md:pb-1 md:block hidden">
+                        MetaMaker is a blockchain platform where players and developers collaborate to
+                    </div>
+                    <div className="z-30 md:text-xl text-lg md:block hidden">
+                        shape, control, and own immersive game experiences.
+                    </div>
+                    <div className="z-30 md:text-xl text-lg md:pb-1 md:hidden block">
+                        MetaMaker is a blockchain platform where players and developers collaborate to
+                        shape, control, and own immersive game experiences.
+                    </div>
+
+                    {/* Glassmorphic Panels */}
+                    <div className="absolute inset-0 flex justify-center items-center z-0 pointer-events-none">
+                        {/* <div
+                            className="absolute top-[37%] left-[-27%] w-[350px] h-[350px] rounded-[30px] bg-gradient-to-t from-white/10 to-transparent backdrop-blur-lg border border-white/20 shadow-lg"
+                            style={{ transform: "rotateX(20deg) rotateY(-60deg)" }}
+                        ></div> */}
+
+                        {/* Glass Panel 1 */}
+                        <div
+                            className="absolute md:block hidden top-[20%] left-[0%] w-[350px] h-[350px] rounded-[30px] bg-gradient-to-t from-white/10 to-transparent backdrop-blur-lg border border-white/20 shadow-lg"
+                            style={{ transform: "rotateX(10deg) rotateY(-50deg)" }}
+                        ></div>
+
+                        {/* Glass Panel 2 */}
+                        <div
+                            className="absolute md:block hidden top-[15%] w-[250px] h-[350px] rounded-[30px] bg-gradient-to-t from-white/10 to-transparent backdrop-blur-md border border-white/15 shadow-lg"
+                            style={{ transform: "rotateX(0deg) rotateY(15deg)" }}
+                        ></div>
+
+                        {/* Glass Panel 3 */}
+                        <div
+                            className="absolute md:block hidden top-[20%] right-[0%] w-[350px] h-[350px] rounded-[30px] bg-gradient-to-t from-white/10 to-transparent backdrop-blur-lg border border-white/20 shadow-lg"
+                            style={{ transform: "rotateX(10deg) rotateY(50deg)" }}
+                        ></div>
+
+                        {/* <div
+                            className="absolute top-[37%] right-[-27%] w-[350px] h-[350px] rounded-[30px] bg-gradient-to-t from-white/10 to-transparent backdrop-blur-lg border border-white/20 shadow-lg"
+                            style={{ transform: "rotateX(20deg) rotateY(60deg)" }}
+                        ></div> */}
+                    </div>
                 </div>
             </motion.div>
 
@@ -163,7 +215,7 @@ const Home: React.FC = () => {
 
             <div ref={openingSectionRef} className="md:mb-0 mb-6"></div>
 
-            <div className="bg-gradient-to-t from-black mt-10 via-black to-transparent md:p-20 p-10 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
+            <div className="bg-gradient-to-t from-black mt-12 via-black to-transparent md:p-20 p-10 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
                 <motion.div
                     className="box"
                     initial={{ opacity: 0, scale: 0, y: 300 }}
