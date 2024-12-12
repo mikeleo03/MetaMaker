@@ -12,6 +12,7 @@ import { ParallaxText } from "@/components";
 import { featureItems } from "@/constant";
 import scroll from "@/assets/gifs/scroll.gif";
 import { Button } from "@/components/ui/button";
+import { PiStarFourFill } from "react-icons/pi";
 
 const Home: React.FC = () => {
     const [init, setInit] = useState(false);  // Particles
@@ -113,7 +114,7 @@ const Home: React.FC = () => {
                 transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
             >
                 <div className="flex flex-col justify-center items-center h-[90vh] mt-[5vh] w-full relative z-10 p-8">
-                    <div className="rounded-3xl border font-semibold p-2 px-6 md:mb-8 mb-6 border-white/10 bg-white/10">🙋 Propose your game assets now!</div>
+                    <div className="rounded-3xl border-2 font-semibold p-2 px-6 mb-6 flex items-center border-white/30 bg-white/10"><PiStarFourFill className="mr-3 text-white"/> Propose your game assets now!</div>
                     <div className="md:text-5xl text-4xl font-bold md:pb-2">Unlock the Future of Game Creation,</div>
                     <div className="md:text-5xl text-4xl font-bold pb-7">Governance, and Ownership!</div>
                     <div className="md:text-xl text-lg md:pb-1 md:block hidden">MetaMaker is a blockchain platform where players and developers collaborate to</div>
@@ -148,13 +149,19 @@ const Home: React.FC = () => {
             >
                 <img className="absolute md:top-[500px] top-[550px] w-[100px] h-[100px] z-50" src={scroll}></img>
             </Button>
+            
+            <motion.div
+                initial={{ opacity:0, y: 300 }}
+                animate={{ opacity:1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1, ease: "easeInOut" }}
+            >
+                <div className="relative w-[100vw] rotate-3 mt-6">
+                    <ParallaxText baseVelocity={-5}>MetaMaker  •</ParallaxText>
+                    <ParallaxText baseVelocity={5}>Blockchain  •</ParallaxText>
+                </div>
+            </motion.div>
 
-            <div className="relative w-[100vw] rotate-3 mt-6">
-                <ParallaxText baseVelocity={-5}>MetaMaker  •</ParallaxText>
-                <ParallaxText baseVelocity={5}>Blockchain  •</ParallaxText>
-            </div>
-
-            <div ref={openingSectionRef} className="md:mt-4 md:mb-0 mb-6"></div>
+            <div ref={openingSectionRef} className="md:mb-0 mb-6"></div>
 
             <div className="bg-gradient-to-t from-black mt-10 via-black to-transparent md:p-20 p-10 z-30 w-full backdrop-blur-md shadow-lg border-b border-white/10">
                 <motion.div
@@ -164,18 +171,18 @@ const Home: React.FC = () => {
                     transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
                 >
                     <div className="text-4xl font-bold text-start mb-2">
-                    What <span className="bg-gradient-to-r from-purple-500 to-white text-transparent bg-clip-text">MetaMaker</span> can actually do?
+                    What <span className="bg-gradient-to-r from-purple-500 via-purple-300 to-white text-transparent bg-clip-text">MetaMaker</span> can actually do?
                     </div>
                     <div className="text-xl mb-10 text-start">Discover the powerful features of MetaMaker!</div>
                 
                     <div 
-                        className="flex md:flex-row flex-col w-full md:h-full h-[84vh] overflow-hidden rounded-lg md:space-y-0 space-y-4"
+                        className="flex md:flex-row flex-col w-full md:h-full h-[84vh] overflow-hidden md:space-y-0 space-y-4"
                         onMouseLeave={resetAccordion}
                     >
                         {featureItems.map((item, index) => (
                             <motion.div
                                 key={index}
-                                className={`flex-1 h-[55vh] md:mx-4 relative rounded-xl cursor-pointer border-4 overflow-hidden ${expandedIndex === index ? 'flex-[2]' : ''}`}
+                                className={`flex-1 h-[55vh] md:mx-4 relative rounded-3xl cursor-pointer border-4 overflow-hidden ${expandedIndex === index ? 'flex-[2]' : ''}`}
                                 onMouseEnter={() => setExpandedIndex(index)}
                                 initial={{ flex: 1 }}
                                 animate={{ flex: expandedIndex === index ? 4 : 1 }}
@@ -183,7 +190,7 @@ const Home: React.FC = () => {
                             >
                                 <div className={`absolute inset-0 ${expandedIndex === index ? "bg-gradient-to-t from-black via-black to-transparent" : "bg-black/60"} opacity-90`} />
                                 <img src={item.image} className="z-0 h-full w-full object-cover" alt="Illustration" />
-                                <div className="absolute bottom-0 w-full text-start text-white p-6 rounded-b-xl">
+                                <div className="absolute bottom-0 w-full text-start text-white p-6">
                                     {expandedIndex === index && (
                                         <motion.p
                                             className="md:text-lg mt-2"

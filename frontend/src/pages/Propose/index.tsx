@@ -182,7 +182,7 @@ const Propose: React.FC = () => {
                                 control={form.control}
                                 name="title"
                                 render={({ field }) => (
-                                    <FormItem className="w-full rounded-2xl">
+                                    <FormItem className="w-full rounded-3xl">
                                         <FormLabel className="self-start text-lg" htmlFor="title">
                                             Asset Title
                                         </FormLabel>
@@ -201,7 +201,7 @@ const Propose: React.FC = () => {
                                 control={form.control}
                                 name="desc"
                                 render={({ field }) => (
-                                    <FormItem className="w-full rounded-2xl">
+                                    <FormItem className="w-full rounded-3xl">
                                         <FormLabel className="self-start text-lg" htmlFor="desc">
                                             Description
                                         </FormLabel>
@@ -229,7 +229,7 @@ const Propose: React.FC = () => {
                                 control={form.control}
                                 name="asset"
                                 render={({ field }) => (
-                                    <FormItem className='w-full rounded-2xl flex flex-col items-center'>
+                                    <FormItem className='w-full rounded-3xl flex flex-col items-center'>
                                         <FormControl>
                                             <>
                                                 <input
@@ -309,7 +309,7 @@ const Propose: React.FC = () => {
                     <div className="flex justify-center items-center">
                         <Button
                             type="submit"
-                            className="text-lg bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white transition-transform duration-300 transform hover:scale-105 rounded-lg px-10 font-semibold py-2.5 mt-1 mb-16"
+                            className="text-lg bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white transition-transform duration-300 transform hover:scale-105 rounded-3xl px-10 font-semibold py-3 mb-16"
                             disabled={onUpdate}
                         >
                             {onUpdate ? <Loader2 className="animate-spin" /> : "Simpan"}

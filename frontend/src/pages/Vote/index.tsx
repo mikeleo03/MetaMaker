@@ -110,8 +110,7 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Countdown Timer */}
-            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur-md md:rounded-lg p-6 md:px-8 pl-10 md:w-auto w-full text-white">
-                {/* <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 backdrop-blur-md md:rounded-lg md:w-auto w-full text-white"> */}
+            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur-md md:rounded-3xl p-6 md:px-8 pl-10 md:w-auto w-full text-white">
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
                     <div className="md:w-64 w-52 bg-gray-800 rounded-full overflow-hidden h-4">
@@ -179,7 +178,7 @@ const Vote: React.FC = () => {
             <div className="md:absolute md:bottom-10 z-50 md:right-8 md:mb-0 mb-10">
                 <button
                     onClick={voteAsset}
-                    className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-lg transition-transform duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105"
                 >
                 Vote
                 </button>

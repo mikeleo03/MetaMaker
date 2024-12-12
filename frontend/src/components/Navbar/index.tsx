@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
                 </div>
 
                 {/* Nav Links */}
-                <div className="hidden md:flex space-x-10 bg-[#2D2841] backdrop-blur-md shadow-lg font-semibold border-[.25px] border-[#37334B] rounded-3xl p-2 px-8">
+                <div className="hidden md:flex space-x-10 bg-[#2D2841] backdrop-blur-md shadow-lg font-semibold border border-white/50 rounded-3xl p-2 px-8">
                     <a
                         href="/"
                         className="hover:text-[#8B5CF4] transition duration-300"
@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
                         Vote
                     </a>
                     <a
-                        href="/"
+                        href="/propose"
                         className="hover:text-[#8B5CF4] transition duration-300"
                     >
                         Propose
@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
                 <div className="flex space-x-4">
                     <a
                         href="#signup"
-                        className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white md:py-1.5 py-2 md:px-6 px-4 font-semibold rounded-lg transition-transform duration-300 transform hover:scale-105"
+                        className="bg-white text-black py-2 md:px-6 px-4 font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105"
                     >
                         Sign up
                     </a>
