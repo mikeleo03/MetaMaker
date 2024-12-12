@@ -72,17 +72,17 @@ const Vote: React.FC = () => {
     const currentAsset = gameAssets[currentIndex];
 
     return (
-        <div className="h-screen bg-black flex flex-col mt-[-13vh] items-center justify-center relative overflow-hidden">
+        <div className="md:h-screen h-full bg-black flex flex-col mt-[-13vh] items-center justify-center relative overflow-hidden">
             {/* Neon Light */}
             <div className="absolute z-30 top-0 left-1/2 transform -translate-x-1/2 w-[500px] h-[900px] shine-animation bg-gradient-to-b from-blue-500 via-transparent to-transparent opacity-30 rounded-full blur-2xl"></div>
             <div
-                className="absolute z-30 top-[250px] left-[30px] w-[350px] h-[375px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-2"
+                className="absolute z-30 md:top-[250px] bottom-[400px] left-[30px] w-[350px] h-[375px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-2"
                 style={{
                     background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
                 }}
             ></div>
             <div
-                className="absolute z-30 top-[280px] right-[10px] w-[300px] h-[300px] bg-purple-500 opacity-50 rounded-full blur-2xl shine-animation delay-3"
+                className="absolute z-30 md:top-[280px] bottom-[10px] right-[10px] w-[300px] h-[300px] bg-purple-500 opacity-50 rounded-full blur-2xl shine-animation delay-3"
                 style={{
                     background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
                 }}
@@ -93,16 +93,8 @@ const Vote: React.FC = () => {
                 <img src={podium}></img>
             </div>
 
-            {/* Advice Vote */}
-            <div className="absolute mt-[11vh] z-30 top-10 left-16 flex flex-col items-start pr-2 justify-start text-white backdrop-blur">
-                <div className='glow text-5xl font-bold mb-1'>Vote Your Favorite</div>
-                <div className='glow text-5xl font-bold mb-3'>Game Asset!</div>
-                <div className='text-xl mb-0'>Make your voice count—vote for the</div>
-                <div className='text-xl'>game asset that stands out!</div>
-            </div>
-
             {/* Countdown Timer */}
-            <div className="absolute bottom-12 left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur rounded-lg p-6 px-8 text-white">
+            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur rounded-lg p-6 md:px-8 text-white">
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
                     <div className="w-64 bg-gray-800 rounded-full overflow-hidden h-4">
@@ -118,36 +110,48 @@ const Vote: React.FC = () => {
                 </div>
             </div>
 
+            {/* Advice Vote */}
+            <div className="absolute z-30 top-10 md:left-16 left-12 flex flex-col items-start pr-2 justify-start text-white backdrop-blur mt-[30vh] md:mt-[11vh]">
+                <div className='glow text-4xl md:text-5xl font-bold md:mb-1'>Vote Your Best</div>
+                <div className='glow text-4xl md:text-5xl font-bold mb-3'>Game Asset!</div>
+                <div className='text-xl md:block hidden mb-0'>Make your voice count—vote for the</div>
+                <div className='text-lg md:hidden block mb-0'>Make your voice count—vote for</div>
+                <div className='text-xl md:block hidden'>game asset that stands out!</div>
+                <div className='text-lg md:hidden block'>the game asset that stands out!</div>
+            </div>
+
             {/* Game Asset Section */}
-            <div className="flex items-center justify-center mt-12 w-full mb-10">
-                {/* Previous Button */}
-                <button
-                    onClick={prevAsset}
-                    className="text-white text-7xl p-2 z-50 items-start transition-transform duration-300 transform hover:scale-110"
-                >
-                    &#x3C;
-                </button>
+            <div className="flex flex-col md:flex-row items-center justify-center md:mt-12 w-full mb-10 mt-64">
+                <div className='flex'>
+                    {/* Previous Button */}
+                    <button
+                        onClick={prevAsset}
+                        className="text-white text-7xl p-2 z-30 items-start transition-transform duration-300 transform hover:scale-110"
+                    >
+                        &#x3C;
+                    </button>
 
-                {/* Floating Asset */}
-                <motion.img
-                    src={currentAsset.image}
-                    alt={currentAsset.title}
-                    className="w-60 z-50 object-contain mx-8"
-                    initial={{ y: 0 }}
-                    animate={{ y: [0, -20, 0] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                />
+                    {/* Floating Asset */}
+                    <motion.img
+                        src={currentAsset.image}
+                        alt={currentAsset.title}
+                        className="md:w-60 w-36 z-30 object-contain mx-8"
+                        initial={{ y: 0 }}
+                        animate={{ y: [0, -20, 0] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                    />
 
-                {/* Next Button */}
-                <button
-                    onClick={nextAsset}
-                    className="text-white text-7xl p-2 z-50 transition-transform duration-300 transform hover:scale-110"
-                >
-                    &#x3E;
-                </button>
+                    {/* Next Button */}
+                    <button
+                        onClick={nextAsset}
+                        className="text-white text-7xl p-2 z-30 transition-transform duration-300 transform hover:scale-110"
+                    >
+                        &#x3E;
+                    </button>
+                </div>
 
                 {/* Glassmorphism Info Section */}
-                <div className="absolute z-30 top-[125px] right-[100px] w-[300px] h-[350px] bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white ml-8">
+                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] h-[350px] bg-purple-500/20 border border-purple-500 backdrop-blur rounded-3xl p-6 text-white md:ml-8">
                     <h1 className="text-2xl font-bold mb-0">{currentAsset.title}</h1>
                     <p className="mt-2 text-sm">Proposed by: {currentAsset.proposer}</p>
                     <p className="mt-2 text-sm text-gray-300">{currentAsset.description}</p>
@@ -155,7 +159,7 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Vote Button */}
-            <div className="absolute bottom-10 z-50 right-8">
+            <div className="md:absolute md:bottom-10 z-50 md:right-8 md:mb-0 mb-10">
                 <button
                     onClick={voteAsset}
                     className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-lg transition-transform duration-300 transform hover:scale-105"
