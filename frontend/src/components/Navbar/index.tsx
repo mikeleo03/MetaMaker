@@ -79,19 +79,26 @@ const Navbar: React.FC = () => {
             <AnimatePresence>
                 {menuOpen && (
                     <motion.div
-                        className="fixed z-50 h-screen inset-0 bg-[#2D2841]/90 backdrop-blur-lg flex flex-col items-center justify-center space-y-6"
+                        className="fixed z-50 h-screen overflow-hidden inset-0 bg-[#2D2841]/90 backdrop-blur-lg flex flex-col items-center justify-center space-y-6"
                         initial={{ y: "-100%" }}
                         animate={{ y: 0 }}
                         exit={{ y: "-100%" }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
+                        {/* Glowing Elements */}
+                        <div className="absolute top-[-50px] right-[-50px] w-[300px] h-[300px] rounded-full bg-gradient-to-br from-[#8B5CF4]/40 to-transparent opacity-70 pointer-events-none animate-pulse blur-2xl"></div>
+                        <div className="absolute bottom-[-50px] left-[-50px] w-[300px] h-[300px] rounded-full bg-gradient-to-tl from-[#8B5CF4]/40 to-transparent opacity-70 pointer-events-none animate-pulse blur-2xl"></div>
+
+                        {/* Close Button */}
                         <button
-                            className="absolute top-5 right-8 p-3 py-4 pb-5 rounded-lg bg-white/20 border border-white/20"
+                            className="absolute top-[-0.5vh] right-8 p-3 py-4 pb-5 rounded-lg bg-white/20 border border-white/20"
                             onClick={toggleMenu}
                         >
                             <span className="block w-6 h-[2px] bg-white rotate-45 translate-y-[2px]"></span>
                             <span className="block w-6 h-[2px] bg-white -rotate-45 -translate-y-[2px]"></span>
                         </button>
+
+                        {/* Nav Links */}
                         {[
                             { path: "/", label: "Home" },
                             { path: "/", label: "About", highlight: false },
@@ -101,7 +108,7 @@ const Navbar: React.FC = () => {
                             <Link
                                 key={path + label}
                                 to={path}
-                                className="text-2xl font-bold text-white transition-transform duration-300 transform hover:scale-110"
+                                className="text-3xl font-bold text-white transition-transform duration-300 transform hover:scale-110"
                                 onClick={toggleMenu}
                             >
                                 {label}
