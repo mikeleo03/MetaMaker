@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LuAlarmClock } from "react-icons/lu";
-import logoWhite from "@/assets/logos/logo.png";
-import podium from "@/assets/images/podium2.jpg"
+
 import { Particles } from '@/components';
 import { useTimer } from '@/contexts/TimerContext';
+import { VOTE_DURATION } from '@/constant';
+
+import logoWhite from "@/assets/logos/logo.png";
+import podium from "@/assets/images/podium2.jpg";
+import { LuAlarmClock } from "react-icons/lu";
 
 interface GameAsset {
     id: number;
@@ -113,7 +116,7 @@ const Vote: React.FC = () => {
                     <div className="md:w-64 w-52 bg-gray-800 rounded-full overflow-hidden h-4">
                         <div
                             className="bg-blue-500 h-full"
-                            style={{ width: `${(remainingTime / 300) * 100}%` }}
+                            style={{ width: `${(remainingTime / VOTE_DURATION) * 100}%` }}
                         ></div>
                     </div>
                     <div className="flex items-center text-white text-lg space-x-2">

@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Form, FormField, FormItem, FormMessage, FormControl, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { Loader2 } from "lucide-react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
-import { Trash2, Upload } from "lucide-react";
-import { FaFileImage } from "react-icons/fa6";
 import { Particles } from "@/components";
-import { LuAlarmClock } from "react-icons/lu";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTimer } from '@/contexts/TimerContext';
+import { PROPOSE_DURATION } from '@/constant';
+
+import { toast } from "react-toastify";
+import { LuAlarmClock } from "react-icons/lu";
+import { FaFileImage } from "react-icons/fa6";
+import { Trash2, Upload, Loader2 } from "lucide-react";
 
 const Propose: React.FC = () => {
     const { phase, remainingTime } = useTimer();
@@ -152,7 +154,7 @@ const Propose: React.FC = () => {
                                 <div className="w-full bg-gray-800 rounded-full overflow-hidden h-4">
                                     <div
                                         className="bg-blue-500 h-full"
-                                        style={{ width: `${(remainingTime / 300) * 100}%` }}
+                                        style={{ width: `${(remainingTime / PROPOSE_DURATION) * 100}%` }}
                                     ></div>
                                 </div>
                                 <div className="flex items-center text-white text-lg space-x-2">

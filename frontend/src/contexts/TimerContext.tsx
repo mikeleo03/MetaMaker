@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { PROPOSE_DURATION, VOTE_DURATION } from '@/constant';
 
 type Phase = 'propose' | 'vote';
 
@@ -12,31 +13,53 @@ const TimerContext = createContext<TimerContextType | undefined>(undefined);
 
 export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [phase, setPhase] = useState<Phase>('propose');
-    const [remainingTime, setRemainingTime] = useState(5 * 60); // 30 minutes
+    const [remainingTime, setRemainingTime] = useState(PROPOSE_DURATION);
+    const [startTime, setStartTime] = useState<number>(Date.now());
 
+    // Initialize stored state
+    useEffect(() => {
+        const storedStartTime = localStorage.getItem('startTime');
+        const storedPhase = localStorage.getItem('phase');
+
+        if (storedStartTime && storedPhase) {
+            setStartTime(parseInt(storedStartTime, 10));
+            setPhase(storedPhase as Phase);
+        } else {
+            localStorage.setItem('startTime', String(Date.now()));
+            localStorage.setItem('phase', 'propose');
+        }
+    }, []);
+
+    // Handle timer logic and phase transitions
     useEffect(() => {
         const timer = setInterval(() => {
-            setRemainingTime((prev) => {
-                if (prev > 0) return prev - 1;
-                return 0;
-            });
+            const now = Date.now();
+            const elapsed = Math.floor((now - startTime) / 1000);
+
+            if (phase === 'propose' && elapsed >= PROPOSE_DURATION) {
+                nextPhase();
+            } else if (phase === 'vote' && elapsed >= VOTE_DURATION) {
+                nextPhase();
+            } else {
+                const duration = phase === 'propose' ? PROPOSE_DURATION : VOTE_DURATION;
+                setRemainingTime(duration - elapsed);
+            }
         }, 1000);
 
-        if (remainingTime === 0) {
-            nextPhase();
-        }
-
         return () => clearInterval(timer);
-    }, [remainingTime]);
+    }, [phase, startTime]);
 
     const nextPhase = () => {
-        if (phase === 'propose') {
-            setPhase('vote');
-            setRemainingTime(2 * 60); // 5 minutes for voting
-        } else {
-            setPhase('propose');
-            setRemainingTime(5 * 60); // 30 minutes for proposing
-        }
+        const newPhase = phase === 'propose' ? 'vote' : 'propose';
+        const newDuration = newPhase === 'propose' ? PROPOSE_DURATION : VOTE_DURATION;
+
+        setPhase(newPhase);
+        setRemainingTime(newDuration);
+
+        const now = Date.now();
+        setStartTime(now);
+        localStorage.setItem('phase', newPhase);
+        localStorage.setItem('startTime', String(now));
     };
 
     return (
