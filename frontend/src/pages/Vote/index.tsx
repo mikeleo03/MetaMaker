@@ -175,7 +175,7 @@ const Vote: React.FC = () => {
             </div>
 
             {/* Vote Button */}
-            <div className="md:absolute md:bottom-10 z-50 md:right-8 md:mb-0 mb-10">
+            <div className="md:absolute md:bottom-10 z-40 md:right-8 md:mb-0 mb-10">
                 <button
                     onClick={voteAsset}
                     className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105"

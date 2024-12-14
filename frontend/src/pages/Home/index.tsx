@@ -110,7 +110,7 @@ const Home: React.FC = () => {
             {/* Podium Light */}
             <div className="absolute top-0 transform w-screen">
                 <img className="md:block hidden w-screen" src={dark}></img>
-                <img className="md:hidden block h-screen" src={dark}></img>
+                <img className="md:hidden block h-screen mt-[13vh]" src={dark}></img>
             </div>
             
             {/* Hero Section */}
@@ -199,7 +199,7 @@ const Home: React.FC = () => {
                 onClick={scrollToOpeningSection}
                 className="h-0 p-0"
             >
-                <img className="absolute md:top-[500px] top-[550px] w-[100px] h-[100px] z-50" src={scroll}></img>
+                <img className="absolute md:top-[500px] top-[550px] w-[100px] h-[100px] z-40" src={scroll}></img>
             </Button>
             
             <motion.div
