@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -19,6 +20,23 @@ import { Trash2, Upload, Loader2 } from "lucide-react";
 
 const Propose: React.FC = () => {
     const { phase, remainingTime } = useTimer();
+    const [countdownTime, setCountdownTime] = useState<number>(0);
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (phase !== 'propose') {
+            const interval = setInterval(() => {
+                setCountdownTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+            }, 1000);
+            return () => clearInterval(interval);
+        } else {
+            setCountdownTime(remainingTime);
+        }
+    }, [phase, remainingTime]);
+
+    useEffect(() => {
+        setCountdownTime(remainingTime);
+    }, [remainingTime]);
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -111,12 +129,8 @@ const Propose: React.FC = () => {
         setAssetUploadProgress(0);
     };
 
-    if (phase !== 'propose') {
-        return <div className="text-center text-white">It's not proposing time yet!</div>;
-    }
-
     return (
-        <main className="flex flex-col w-full min-h-screen bg-[#19181B] relative overflow-hidden mt-[-13vh]">
+        <main className={`flex flex-col w-full ${phase !== 'propose' ? "h-screen" : "h-full"} min-h-screen bg-[#19181B] relative overflow-hidden mt-[-12vh]`}>
             {/* Glassmorphic Ornaments */}
             <div
                 className="absolute top-[-250px] left-1/2 transform -translate-x-1/2 w-[800px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-1"
@@ -136,6 +150,63 @@ const Propose: React.FC = () => {
                     background: "linear-gradient(145deg, rgba(128, 0, 255, 0.6), rgba(153, 51, 255, 0.4))",
                 }}
             ></div>
+
+            {/* Conditional Overlay for Voting Phase */}
+            {phase !== 'propose' && (
+                <div className="absolute inset-0 z-40 bg-[#2D2841]/80 backdrop-blur-lg flex flex-col items-center justify-center">
+                    {/* Decorative Background */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-gradient-to-br from-purple-500 via-blue-500 to-transparent opacity-40 rounded-full blur-3xl"></div>
+                    <div className="absolute top-1/3 left-1/3 transform -translate-x-1/3 -translate-y-1/3 w-[200px] h-[200px] bg-gradient-to-tl from-blue-500 via-purple-500 to-transparent opacity-50 rounded-full blur-2xl"></div>
+
+                    {/* Content */}
+                    <div className="relative z-50 text-center flex flex-col text-white items-center space-y-4">
+                        {/* Countdown */}
+                        <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2"
+                                stroke="white"
+                                className="w-10 h-10"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M12 15v2m0 0a2 2 0 100-4 2 2 0 000 4zm6-6V7a6 6 0 10-12 0v4m12 0H6m12 0a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8a2 2 0 012-2"
+                                />
+                            </svg>
+                        </div>
+                    
+                        {/* Title and Description */}
+                        <h2 className="text-4xl font-bold">Proposing is Locked</h2>
+                        <p className="text-lg text-gray-300 md:max-w-lg max-w-72">
+                            Proposing isn't open at the moment. Please come back later or take one of the actions below!
+                        </p>
+
+                        {/* Buttons */}
+                        <div className="flex space-x-4">
+                            <button
+                                onClick={() => navigate('/')}
+                                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300"
+                            >
+                                Back to Home
+                            </button>
+                            <button
+                                onClick={() => navigate('/vote')}
+                                className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300"
+                            >
+                                Vote Asset
+                            </button>
+                        </div>
+
+                        {/* Countdown Timer */}
+                        <p className="text-lg text-gray-300 max-w-lg mb-4">
+                            Proposing period starts in {formatTime(countdownTime)}
+                        </p>
+                    </div>
+                </div>
+            )}
 
             <Form {...form}>
                 {/* Title */}
