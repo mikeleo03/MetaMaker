@@ -1,14 +1,16 @@
 import { Outlet, RouteObject, createBrowserRouter } from "react-router-dom";
 import { Home, Propose, Vote } from "@/pages";
-import { Navbar, Footer } from "@/components";
+import { Navbar, Footer, ScrollToTop } from "@/components";
 // import { AuthProvider } from "@/contexts/AuthContext";
 
 const MainLayout = () => {
     return (
         <div className="bg-[#19181B]">
-            <Navbar />
-            <Outlet />
-            <Footer />
+            <ScrollToTop>
+                <Navbar />
+                <Outlet />
+                <Footer />
+            </ScrollToTop>
         </div>
     );
 };
