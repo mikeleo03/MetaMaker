@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from "framer-motion";
 import logoWhite from "@/assets/logos/logo.png";
 
 const Navbar: React.FC = () => {
     const location = useLocation(); // Get the current location
 
+    const [menuOpen, setMenuOpen] = useState(false); // State to toggle burger menu
+    const toggleMenu = () => setMenuOpen(!menuOpen);
+
     return (
-        <div className="flex items-center justify-between bg-none p-5 px-8 md:px-12 w-full sticky top-0 z-50 text-white backdrop-blur-md shadow-lg border-b border-white/10">
+        <div className="flex flex-col items-center justify-between bg-none p-5 px-8 md:px-12 w-full sticky top-0 z-50 text-white backdrop-blur-md shadow-lg border-b border-white/10">
             <div className="mx-auto flex w-full justify-between items-center">
                 {/* Logo */}
                 <div className="text-xl font-bold h-full">
@@ -49,7 +53,7 @@ const Navbar: React.FC = () => {
                 </div>
 
                 {/* Auth Buttons */}
-                <div className="flex space-x-4">
+                <div className="md:flex hidden space-x-4">
                     <a
                         href="#signup"
                         className="bg-gradient-to-t from-white/20 to-transparent text-white py-2 md:px-6 px-4 font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105 hover:bg-white/30 backdrop-blur-lg border border-white/30"
@@ -57,7 +61,55 @@ const Navbar: React.FC = () => {
                         Sign up
                     </a>
                 </div>
+
+                {/* Burger Menu (Mobile) */}
+                <button
+                    className="md:hidden flex items-center space-x-2 p-3 border border-white/20 rounded-lg transition-transform duration-300 transform hover:scale-105 bg-white/10"
+                    onClick={toggleMenu}
+                >
+                    <div className="space-y-1">
+                        <span className="block w-6 h-[2px] bg-white"></span>
+                        <span className="block w-6 h-[2px] bg-white"></span>
+                        <span className="block w-6 h-[2px] bg-white"></span>
+                    </div>
+                </button>
             </div>
+
+            {/* Fullscreen Menu (Mobile) */}
+            <AnimatePresence>
+                {menuOpen && (
+                    <motion.div
+                        className="fixed z-50 h-screen inset-0 bg-[#2D2841]/90 backdrop-blur-lg flex flex-col items-center justify-center space-y-6"
+                        initial={{ y: "-100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "-100%" }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                        <button
+                            className="absolute top-5 right-8 p-3 py-4 pb-5 rounded-lg bg-white/20 border border-white/20"
+                            onClick={toggleMenu}
+                        >
+                            <span className="block w-6 h-[2px] bg-white rotate-45 translate-y-[2px]"></span>
+                            <span className="block w-6 h-[2px] bg-white -rotate-45 -translate-y-[2px]"></span>
+                        </button>
+                        {[
+                            { path: "/", label: "Home" },
+                            { path: "/", label: "About", highlight: false },
+                            { path: "/vote", label: "Vote" },
+                            { path: "/propose", label: "Propose" },
+                        ].map(({ path, label }) => (
+                            <Link
+                                key={path + label}
+                                to={path}
+                                className="text-2xl font-bold text-white transition-transform duration-300 transform hover:scale-110"
+                                onClick={toggleMenu}
+                            >
+                                {label}
+                            </Link>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
