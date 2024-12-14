@@ -109,7 +109,7 @@ const Vote: React.FC = () => {
     const currentAsset = gameAssets[currentIndex];
 
     return (
-        <div className={`md:h-screen ${phase !== 'vote' ? "h-screen" : "h-full"} bg-black flex flex-col mt-[-14vh] items-center justify-center relative overflow-hidden`}>
+        <div className={`md:h-screen ${phase !== 'vote' ? "h-screen" : "h-full"} bg-black flex flex-col md:mt-[-14vh] mt-[-12vh] items-center justify-center relative overflow-hidden`}>
             {/* Neon Light */}
             <div className="absolute z-30 top-0 left-1/2 transform -translate-x-1/2 w-[500px] h-[900px] shine-animation bg-gradient-to-b from-blue-500 via-transparent to-transparent opacity-30 rounded-full blur-2xl"></div>
             <div
@@ -127,23 +127,23 @@ const Vote: React.FC = () => {
 
             {/* Winner Announcement */}
             {(winner && showWinner === true) && (
-                <div className="absolute inset-0 top-0 z-50 h-screen mb-[-2vh] backdrop-blur-lg bg-black/80 flex overflow-hidden flex-col items-center justify-center text-white text-center">
+                <div className="absolute inset-0 top-0 z-50 md:h-screen h-full mb-[-2vh] backdrop-blur-lg bg-black/80 flex overflow-hidden flex-col items-center justify-center text-white text-center">
                     {/* Decorative Background */}
-                    <div className="absolute top-1/2 right-1/2 transform translate-x-[40vw] translate-y-[5vh] w-[300px] h-[300px] bg-gradient-to-br from-purple-500 via-blue-500 to-transparent opacity-40 rounded-full blur-3xl"></div>
-                    <div className="absolute top-1/3 left-1/3 transform -translate-x-[20vw] -translate-y-[20vh] w-[200px] h-[200px] bg-gradient-to-tl from-blue-500 via-purple-500 to-transparent opacity-50 rounded-full blur-2xl"></div>
+                    <div className="absolute z-40 top-1/2 right-1/2 transform translate-x-[40vw] translate-y-[5vh] w-[300px] h-[300px] bg-gradient-to-br from-purple-500 via-blue-500 to-transparent opacity-40 rounded-full blur-3xl"></div>
+                    <div className="absolute z-40 top-1/3 left-1/3 transform -translate-x-[20vw] -translate-y-[20vh] w-[200px] h-[200px] bg-gradient-to-tl from-blue-500 via-purple-500 to-transparent opacity-50 rounded-full blur-2xl"></div>
 
-                    <div className='max-w-4xl'>
-                        <h1 className="text-6xl font-bold mb-8">Congratulations!</h1>
-                        <div className="flex items-center space-x-20">
+                    <div className='md:max-w-4xl max-w-72 z-50'>
+                        <h1 className="md:text-6xl text-4xl font-bold mb-6">Congratulations!</h1>
+                        <div className="flex md:flex-row flex-col items-center md:space-x-20 space-y-6">
                             <img
                                 src={winner.image}
                                 alt={winner.title}
-                                className="w-64 h-64 object-contain rounded-lg shadow-lg"
+                                className="md:w-64 md:h-64 w-32 h-32 object-contain rounded-lg shadow-lg"
                             />
-                            <div className="text-left">
-                                <h2 className="text-4xl font-bold mb-4">{winner.title}</h2>
-                                <p className="text-xl mb-2">Proposed by: {winner.proposer}</p>
-                                <p className="text-lg text-gray-300">{winner.description}</p>
+                            <div className="md:text-left text-center">
+                                <h2 className="md:text-4xl text-3xl font-bold mb-4">{winner.title}</h2>
+                                <p className="md:text-xl text-lg mb-2">Proposed by: {winner.proposer}</p>
+                                <p className="md:text-lg text-gray-300 md:h-[25vh] h-[20vh] overflow-y-auto">{winner.description}</p>
                             </div>
                         </div>
                         <button
@@ -219,7 +219,7 @@ const Vote: React.FC = () => {
             )}
 
             {/* Countdown Timer */}
-            <div className="md:absolute md:mt-0 mt-[13vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur-md md:rounded-3xl p-6 md:px-8 pl-10 md:w-auto w-full text-white">
+            <div className="md:absolute md:mt-0 mt-[12vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur-md md:rounded-3xl p-6 md:px-8 pl-10 md:w-auto w-full text-white">
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
                     <div className="md:w-64 w-52 bg-gray-800 rounded-full overflow-hidden h-4">

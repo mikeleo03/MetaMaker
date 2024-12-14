@@ -130,7 +130,7 @@ const Propose: React.FC = () => {
     };
 
     return (
-        <main className={`flex flex-col w-full ${phase !== 'propose' ? "h-screen" : "h-full"} min-h-screen bg-[#19181B] relative overflow-hidden mt-[-14vh]`}>
+        <main className={`flex flex-col w-full ${phase !== 'propose' ? "h-screen" : "h-full"} min-h-screen bg-[#19181B] relative overflow-hidden md:mt-[-14vh] mt-[-12vh]`}>
             {/* Glassmorphic Ornaments */}
             <div
                 className="absolute top-[-250px] left-1/2 transform -translate-x-1/2 w-[800px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-1"
@@ -159,7 +159,7 @@ const Propose: React.FC = () => {
                     <div className="absolute top-1/3 left-1/3 transform -translate-x-1/3 -translate-y-1/3 w-[200px] h-[200px] bg-gradient-to-tl from-blue-500 via-purple-500 to-transparent opacity-50 rounded-full blur-2xl"></div>
 
                     {/* Content */}
-                    <div className="relative z-50 text-center flex flex-col text-white items-center space-y-4">
+                    <div className="relative z-50 text-center flex flex-col text-white items-center space-y-4 mt-[10vh]">
                         {/* Countdown */}
                         <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
                             <svg

@@ -120,7 +120,7 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ type: "spring", duration: 1.5, bounce: 0.25 }}
             >
-                <div className="relative flex flex-col justify-center items-center h-[90vh] mt-[5vh] w-full z-10 p-8">
+                <div className="relative flex flex-col justify-center items-center h-[90vh] mt-[8vh] w-full z-10 p-8">
                     {/* Call to Action */}
                     <div className="z-30 rounded-3xl border-2 font-semibold p-2 px-6 mb-6 flex items-center border-white/30 bg-white/10">
                         <PiStarFourFill className="mr-3 text-white" /> Propose your game assets now!
