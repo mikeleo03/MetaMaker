@@ -4,6 +4,7 @@ import { LuAlarmClock } from "react-icons/lu";
 import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium2.jpg"
 import { Particles } from '@/components';
+import { useTimer } from '@/contexts/TimerContext';
 
 interface GameAsset {
     id: number;
@@ -40,15 +41,7 @@ const gameAssets: GameAsset[] = [
 const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [remainingTime, setRemainingTime] = useState(300);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setRemainingTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
-        }, 1000);
-    
-        return () => clearInterval(timer);
-    }, []);
+    const { phase, remainingTime } = useTimer();
     
     const nextAsset = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % gameAssets.length);
@@ -67,7 +60,7 @@ const Vote: React.FC = () => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-    };    
+    }
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'ArrowLeft') {
@@ -86,6 +79,10 @@ const Vote: React.FC = () => {
     }, []);
 
     const currentAsset = gameAssets[currentIndex];
+
+    if (phase !== 'vote') {
+        return <div className="text-center text-white">It's not voting time yet!</div>;
+    }
 
     return (
         <div className="md:h-screen h-full bg-black flex flex-col mt-[-13vh] items-center justify-center relative overflow-hidden">

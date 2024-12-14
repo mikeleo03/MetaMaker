@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage, FormControl, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -13,17 +13,10 @@ import { Trash2, Upload } from "lucide-react";
 import { FaFileImage } from "react-icons/fa6";
 import { Particles } from "@/components";
 import { LuAlarmClock } from "react-icons/lu";
+import { useTimer } from '@/contexts/TimerContext';
 
 const Propose: React.FC = () => {
-    const [remainingTime, setRemainingTime] = useState(300);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setRemainingTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
-        }, 1000);
-    
-        return () => clearInterval(timer);
-    }, []);
+    const { phase, remainingTime } = useTimer();
 
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -115,6 +108,10 @@ const Propose: React.FC = () => {
         setAssetFile(null);
         setAssetUploadProgress(0);
     };
+
+    if (phase !== 'propose') {
+        return <div className="text-center text-white">It's not proposing time yet!</div>;
+    }
 
     return (
         <main className="flex flex-col w-full min-h-screen bg-[#19181B] relative overflow-hidden mt-[-13vh]">
