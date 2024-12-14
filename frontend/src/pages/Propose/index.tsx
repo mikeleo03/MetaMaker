@@ -130,7 +130,7 @@ const Propose: React.FC = () => {
     };
 
     return (
-        <main className={`flex flex-col w-full ${phase !== 'propose' ? "h-screen" : "h-full"} min-h-screen bg-[#19181B] relative overflow-hidden mt-[-12vh]`}>
+        <main className={`flex flex-col w-full ${phase !== 'propose' ? "h-screen" : "h-full"} min-h-screen bg-[#19181B] relative overflow-hidden mt-[-14vh]`}>
             {/* Glassmorphic Ornaments */}
             <div
                 className="absolute top-[-250px] left-1/2 transform -translate-x-1/2 w-[800px] h-[500px] bg-purple-500 opacity-30 rounded-full blur-2xl shine-animation delay-1"

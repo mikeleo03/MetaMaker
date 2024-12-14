@@ -106,7 +106,7 @@ const Home: React.FC = () => {
     };
 
     return (
-        <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-13vh] bg-[#19181B] text-white relative overflow-hidden">
+        <main className="flex flex-col w-full text-center items-center min-h-screen mt-[-14vh] bg-[#19181B] text-white relative overflow-hidden">
             {/* Podium Light */}
             <div className="absolute top-0 transform w-screen">
                 <img className="md:block hidden w-screen" src={dark}></img>

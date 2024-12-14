@@ -46,6 +46,8 @@ const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [countdownTime, setCountdownTime] = useState<number>(0);
+    const [showWinner, setShowWinner] = useState(false);
+    const [winner, setWinner] = useState<GameAsset | null>(null);
     const { phase, remainingTime } = useTimer();
     const navigate = useNavigate();
 
@@ -54,8 +56,10 @@ const Vote: React.FC = () => {
             const interval = setInterval(() => {
                 setCountdownTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
             }, 1000);
+            setShowWinner(true);
             return () => clearInterval(interval);
         } else {
+            setShowWinner(false);
             setCountdownTime(remainingTime);
         }
     }, [phase, remainingTime]);
@@ -74,9 +78,12 @@ const Vote: React.FC = () => {
     
     const voteAsset = () => {
         setShowConfirmation(true);
-        setTimeout(() => setShowConfirmation(false), 2000);
+        setWinner(gameAssets[currentIndex]);
+        setTimeout(() => {
+            setShowConfirmation(false);
+        }, 2000);
     };
-    
+
     const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -102,7 +109,7 @@ const Vote: React.FC = () => {
     const currentAsset = gameAssets[currentIndex];
 
     return (
-        <div className={`md:h-screen ${phase !== 'vote' ? "h-screen" : "h-full"} bg-black flex flex-col mt-[-12vh] items-center justify-center relative overflow-hidden`}>
+        <div className={`md:h-screen ${phase !== 'vote' ? "h-screen" : "h-full"} bg-black flex flex-col mt-[-14vh] items-center justify-center relative overflow-hidden`}>
             {/* Neon Light */}
             <div className="absolute z-30 top-0 left-1/2 transform -translate-x-1/2 w-[500px] h-[900px] shine-animation bg-gradient-to-b from-blue-500 via-transparent to-transparent opacity-30 rounded-full blur-2xl"></div>
             <div
@@ -118,6 +125,37 @@ const Vote: React.FC = () => {
                 }}
             ></div>
 
+            {/* Winner Announcement */}
+            {(winner && showWinner === true) && (
+                <div className="absolute inset-0 top-0 z-50 h-screen mb-[-2vh] backdrop-blur-lg bg-black/80 flex overflow-hidden flex-col items-center justify-center text-white text-center">
+                    {/* Decorative Background */}
+                    <div className="absolute top-1/2 right-1/2 transform translate-x-[40vw] translate-y-[5vh] w-[300px] h-[300px] bg-gradient-to-br from-purple-500 via-blue-500 to-transparent opacity-40 rounded-full blur-3xl"></div>
+                    <div className="absolute top-1/3 left-1/3 transform -translate-x-[20vw] -translate-y-[20vh] w-[200px] h-[200px] bg-gradient-to-tl from-blue-500 via-purple-500 to-transparent opacity-50 rounded-full blur-2xl"></div>
+
+                    <div className='max-w-4xl'>
+                        <h1 className="text-6xl font-bold mb-8">Congratulations!</h1>
+                        <div className="flex items-center space-x-20">
+                            <img
+                                src={winner.image}
+                                alt={winner.title}
+                                className="w-64 h-64 object-contain rounded-lg shadow-lg"
+                            />
+                            <div className="text-left">
+                                <h2 className="text-4xl font-bold mb-4">{winner.title}</h2>
+                                <p className="text-xl mb-2">Proposed by: {winner.proposer}</p>
+                                <p className="text-lg text-gray-300">{winner.description}</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => {setShowWinner(false); setWinner(null)}} // Clear winner and move to the next phase
+                            className="mt-10 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md transition-all duration-300"
+                        >
+                            Continue
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Podium Light */}
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-[200px] w-full">
                 <img src={podium}></img>
@@ -131,7 +169,7 @@ const Vote: React.FC = () => {
                     <div className="absolute top-1/3 left-1/3 transform -translate-x-1/3 -translate-y-1/3 w-[200px] h-[200px] bg-gradient-to-tl from-blue-500 via-purple-500 to-transparent opacity-50 rounded-full blur-2xl"></div>
 
                     {/* Content */}
-                    <div className="relative z-50 text-center flex flex-col text-white items-center space-y-4">
+                    <div className="relative z-50 text-center flex flex-col text-white items-center space-y-4 mt-[10vh]">
                         {/* Countdown */}
                         <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
                             <svg
