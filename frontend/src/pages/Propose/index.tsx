@@ -324,7 +324,7 @@ const Propose: React.FC = () => {
                                                     ) : (
                                                         <div className="flex flex-col items-center text-main2 py-10">
                                                             <Upload className="w-12 h-12 mb-2" />
-                                                            <span className="text-sm font-medium text-gray-600 bg-yellow py-2.5 px-6 font-semibold rounded-2xl transition-transform duration-300 transform hover:scale-110">Unggah Gambar</span>
+                                                            <span className="text-sm font-medium text-gray-600 bg-yellow py-2.5 px-6 font-semibold rounded-2xl transition-transform duration-300 transform hover:scale-110">Upload Asset</span>
                                                         </div>
                                                     )}
                                                 </label>
@@ -364,7 +364,7 @@ const Propose: React.FC = () => {
                                                     onClick={removeAssetFile}
                                                 >
                                                     <Trash2 className="w-4 h-4 mr-1" />
-                                                    Hapus gambar ini
+                                                    Erase uploaded asset
                                                 </Button>
                                             </div>
                                         )}
@@ -382,7 +382,7 @@ const Propose: React.FC = () => {
                             className="text-lg bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white transition-transform duration-300 transform hover:scale-105 rounded-3xl px-10 font-semibold py-3 mb-16"
                             disabled={onUpdate}
                         >
-                            {onUpdate ? <Loader2 className="animate-spin" /> : "Simpan"}
+                            {onUpdate ? <Loader2 className="animate-spin" /> : "Save Asset"}
                         </Button>
                     </div>
                 </form>
