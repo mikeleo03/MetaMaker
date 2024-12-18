@@ -1,13 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from "framer-motion";
 import logoWhite from "@/assets/logos/logo.png";
+import { ethers } from 'ethers';
+import { useWallet } from '@/contexts/WalletContext';
 
 const Navbar: React.FC = () => {
     const location = useLocation(); // Get the current location
 
     const [menuOpen, setMenuOpen] = useState(false); // State to toggle burger menu
     const toggleMenu = () => setMenuOpen(!menuOpen);
+    const { account, connectWallet } = useWallet();
+    const [ensName, setEnsName] = useState<string | null>(null);
+
+    const handleConnectWallet = async () => {
+        try {
+            await connectWallet();
+        } catch (error) {
+            console.error("Failed to connect wallet:", error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchENSName = async () => {
+            if (account) {
+                try {
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []); 
+                    const signer = await provider.getSigner();
+                    const address = await signer.address;
+
+                    // Try to fetch ENS name
+                    const name = await provider.lookupAddress(address);
+                    setEnsName(name || null);
+                } catch (error) {
+                    console.error("Error fetching ENS name:", error);
+                }
+            }
+        };
+
+        fetchENSName();
+    }, [account]);
 
     return (
         <div className="flex flex-col items-center justify-between bg-none p-5 px-8 md:px-12 w-full sticky top-0 z-50 text-white backdrop-blur-md shadow-lg border-b border-white/10">
@@ -54,12 +87,18 @@ const Navbar: React.FC = () => {
 
                 {/* Auth Buttons */}
                 <div className="md:flex hidden space-x-4">
-                    <a
-                        href="#signup"
-                        className="bg-gradient-to-t from-white/20 to-transparent text-white py-2 md:px-6 px-4 font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105 hover:bg-white/30 backdrop-blur-lg border border-white/30"
-                    >
-                        Sign up
-                    </a>
+                    {account ? (
+                        <span className="text-white py-2 px-4 font-semibold rounded-3xl border border-white/30">
+                            {ensName || "Connected"}
+                        </span>
+                    ) : (
+                        <button
+                            onClick={handleConnectWallet}
+                            className="bg-gradient-to-t from-white/20 to-transparent text-white py-2 md:px-6 px-4 font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105 hover:bg-white/30 backdrop-blur-lg border border-white/30"
+                        >
+                            Connect Wallet
+                        </button>
+                    )}
                 </div>
 
                 {/* Burger Menu (Mobile) */}
