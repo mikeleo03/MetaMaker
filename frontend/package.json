@@ -20,6 +20,7 @@
     "@tsparticles/react": "^3.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "ethers": "^6.13.4",
     "lucide-react": "^0.453.0",
     "MetaMaker": "file:",
     "motion": "^11.13.5",
@@ -32,6 +33,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "tsparticles": "^3.7.1",
+    "web3": "^4.16.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
