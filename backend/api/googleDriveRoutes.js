@@ -1,5 +1,5 @@
 const express = require("express");
-const { uploadFile, getAllFiles } = require("../service/googleDriveService");
+const { uploadFile, getAllFiles, deleteAllFiles } = require("../service/googleDriveService");
 const { callOracleToUpdateSC } = require("../service/oracleService");
 
 const router = express.Router();
@@ -34,6 +34,16 @@ router.get("/file", async (req, res) => {
   } catch (error) {
     console.error("Error fetching files:", error);
     res.status(500).send("Failed to fetch files");
+  }
+});
+
+router.delete("/files", async (req, res) => {
+  try {
+      await deleteAllFiles();
+      res.status(200).json({ message: "All files deleted successfully." });
+  } catch (error) {
+      console.error("Error deleting all files:", error);
+      res.status(500).json({ message: error.message });
   }
 });
 
