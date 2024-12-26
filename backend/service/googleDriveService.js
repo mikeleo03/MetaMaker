@@ -16,9 +16,22 @@ const oauth2Client = new google.auth.OAuth2(
 oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 const drive = google.drive({ version: "v3", auth: oauth2Client });
 
+async function getFileMetadata(fileId) {
+    try {
+        const response = await drive.files.get({
+            fileId: fileId,
+            fields: "id, name, mimeType",
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching file metadata:", error);
+        throw error;
+    }
+}
+
 async function uploadFile(file) {
     const fileMetadata = {
-        name: file.originalname,
+        name: file.name,
         parents: [`${process.env.FOLDER_ID}`],
     }
 
@@ -88,4 +101,27 @@ async function deleteAllFiles() {
     }
 }
 
-module.exports = { uploadFile, getAllFiles, deleteAllFiles };
+async function downloadFile(fileId, destinationPath) {
+    try {
+        // Mendapatkan file dari Google Drive
+        const dest = fs.createWriteStream(destinationPath);
+
+        const response = await drive.files.get(
+            { fileId: fileId, alt: "media" },
+            { responseType: "stream" }
+        );
+
+        // Mengalirkan data ke file lokal
+        response.data.pipe(dest);
+
+        return new Promise((resolve, reject) => {
+            dest.on("finish", () => resolve(`File downloaded to: ${destinationPath}`));
+            dest.on("error", (err) => reject(`Error downloading file: ${err.message}`));
+        });
+    } catch (error) {
+        console.error('Error downloading file from Google Drive:', error);
+        throw error;
+    }
+}
+
+module.exports = { getFileMetadata, uploadFile, getAllFiles, deleteAllFiles, downloadFile };

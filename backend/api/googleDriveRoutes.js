@@ -1,6 +1,6 @@
 const express = require("express");
 const { uploadFile, getAllFiles, deleteAllFiles } = require("../service/googleDriveService");
-const { callOracleToUpdateSC } = require("../service/oracleService");
+const { oracleUploadAsset, oracleGetAllAssets } = require("../service/oracleService");
 
 const router = express.Router();
 
@@ -12,11 +12,11 @@ router.post("/upload", async (req, res) => {
     const driveLink = await uploadFile(file);
 
     // Panggil Oracle untuk update link ke Smart Contract
-    // const txHash = await callOracleToUpdateSC(driveLink);
+    const txHash = await oracleUploadAsset(driveLink, file.name.split('.').slice(0, -1).join('.'));
 
     res.status(200).json({
       message: "File uploaded and Smart Contract updated!",
-      transactionHash: driveLink,
+      transactionHash: txHash,
     });
   } catch (error) {
     console.error("Error:", error);
@@ -24,16 +24,22 @@ router.post("/upload", async (req, res) => {
   }
 });
 
-router.get("/file", async (req, res) => {
+router.get("/assets", async (req, res) => {
   try {
-    const files = await getAllFiles(); 
+    // const files = await getAllFiles(); 
+    // res.status(200).json({
+    //   message: "Files fetched successfully",
+    //   files,
+    // });
+
+    const assets = await oracleGetAllAssets();
     res.status(200).json({
       message: "Files fetched successfully",
-      files,
+      assets,
     });
   } catch (error) {
-    console.error("Error fetching files:", error);
-    res.status(500).send("Failed to fetch files");
+    console.error("Error fetching assets:", error);
+    res.status(500).send("Failed to fetch assets");
   }
 });
 
