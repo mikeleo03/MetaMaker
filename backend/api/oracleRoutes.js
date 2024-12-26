@@ -10,8 +10,7 @@ const router = express.Router();
 
 router.post("/win", async (req, res) => {
     try {
-        // const winner = await oracleDeclareWinner();
-        const winner = req.body;
+        const winner = await oracleDeclareWinner();
         const fileId = winner.link.split("/d/")[1].split("/")[0]; 
         const fileMetadata = await getFileMetadata(fileId);
         const fileName = fileMetadata.name;

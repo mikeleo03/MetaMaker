@@ -26,17 +26,14 @@ router.post("/upload", async (req, res) => {
 
 router.get("/assets", async (req, res) => {
   try {
-    // const files = await getAllFiles(); 
-    // res.status(200).json({
-    //   message: "Files fetched successfully",
-    //   files,
-    // });
-
     const assets = await oracleGetAllAssets();
-    res.status(200).json({
-      message: "Files fetched successfully",
-      assets,
-    });
+    const processedAssets = JSON.parse(
+      JSON.stringify(assets, (key, value) =>
+        typeof value === "bigint" ? value.toString() : value
+      )
+    );
+    
+    res.status(200).json(processedAssets);
   } catch (error) {
     console.error("Error fetching assets:", error);
     res.status(500).send("Failed to fetch assets");
