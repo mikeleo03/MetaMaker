@@ -38,17 +38,8 @@ contract Patch {
         endPatchTime = startVoteTime + VOTING_PERIOD;
     }
 
-    modifier isUploadTime {
-        require(block.timestamp >= startPatchTime && block.timestamp < startVoteTime, "Not in upload period");
-        _;
-    }
-
-    modifier isVotingTime {
-        require(block.timestamp >= startVoteTime && block.timestamp < endPatchTime, "Not in voting period");
-        _;
-    }
-
-    function uploadAsset(address _uploader, bytes32 _assetName, string memory _assetLink) public isUploadTime {
+    function uploadAsset(address _uploader, bytes32 _assetName, string memory _assetLink, uint256 _currTimeSecs) public {
+        require(_currTimeSecs >= startPatchTime && _currTimeSecs < startVoteTime, "Not in upload period");
         require(!participants[_uploader].hasUploaded, "Uploader has uploaded an asset this patch");
         Asset memory newAsset = Asset(_uploader, patchId, _assetName, _assetLink, 0);
         participants[_uploader].hasUploaded = true;
@@ -60,8 +51,10 @@ contract Patch {
         return allAssets;
     }
 
-    function vote(address _voter, uint _assetIdx) public isVotingTime {
+    function vote(address _voter, uint _assetIdx, uint256 _currTimeSecs) public {
+        require(_currTimeSecs >= startVoteTime && _currTimeSecs < endPatchTime, "Not in voting period");
         require(!participants[_voter].hasVoted, "Uploader has voted for an asset this patch");
+        require(!(allAssets[_assetIdx].creator == _voter), "Voter can't vote for their own asset");
         require(_assetIdx >= 0 && _assetIdx < allAssets.length, "Index invalid");
         participants[_voter].hasVoted = true;
         allAssets[_assetIdx].voteCount += 1;
