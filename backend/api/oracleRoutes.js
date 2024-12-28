@@ -2,11 +2,32 @@ require("dotenv").config();
 const express = require("express");
 const GithubService = require("../service/githubService");
 const { deleteAllFiles, downloadFile, getFileMetadata } = require("../service/googleDriveService");
-const { oracleCreateNewPatch, oracleDeclareWinner } = require("../service/oracleService");
+const { oracleCreateNewPatch, oracleVote, oracleDeclareWinner } = require("../service/oracleService");
 const path = require('path');
 const fs = require('fs');
 
 const router = express.Router();
+router.post("/vote", async (req, res) => {
+  try {
+    const { assetIdx } = req.body;
+    if (assetIdx === undefined || assetIdx === null) {
+      return res.status(400).json({ message: "Asset ID is required." });
+    }
+
+    const result = await oracleVote(assetIdx);
+    res.status(200).json({
+      message: "Vote successful.",
+      data: result,
+    });
+
+  } catch (error) {
+    console.error("Error voting:", error);
+    res.status(500).json({
+      message: "Failed to vote asset.",
+      error: error.message,
+    });
+  }
+})
 
 router.post("/win", async (req, res) => {
     try {

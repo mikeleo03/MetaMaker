@@ -127,6 +127,25 @@ async function oracleGetAllAssets() {
   }
 }
 
+async function oracleVote(assetIdx) {
+  try {
+    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
+    web3.eth.accounts.wallet.add(account);
+
+    const currPatchIndex = await contract.methods.currPatch().call();
+    const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentTimeSecs = Math.floor(Date.now() / 1000);
+
+    const voteTx = await currentPatchContract.methods.vote(account.address, assetIdx, currentTimeSecs).call();
+    return voteTx;
+  } catch (error) {
+    console.error("Error sending transaction:", error);
+    throw new Error("Failed to vote.");
+  }
+}
+
+
 async function oracleDeclareWinner() {
   try {
     const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
@@ -144,4 +163,4 @@ async function oracleDeclareWinner() {
   }
 }
 
-module.exports = { oracleCreateNewPatch, oracleUploadAsset, oracleGetAllAssets, oracleDeclareWinner }
+module.exports = { oracleCreateNewPatch, oracleUploadAsset, oracleGetAllAssets, oracleDeclareWinner, oracleVote }
