@@ -9,7 +9,7 @@ class ProposeApi {
 
     static async add(payload: FormData): Promise<any> {
         try {
-            const response = await this.axios.post("/propose", payload, {
+            const response = await this.axios.post("/upload", payload, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

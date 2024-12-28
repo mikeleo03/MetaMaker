@@ -25,7 +25,7 @@ import { ProposeApi } from "@/api";
 const Propose: React.FC = () => {
     const { phase, remainingTime } = useTimer();
     const { account } = useWallet();
-    const [ensName, setEnsName] = useState<string | null>(null);
+    const [address, setAddress] = useState<string | null>(null);
     const [countdownTime, setCountdownTime] = useState<number>(0);
     const navigate = useNavigate();
 
@@ -36,11 +36,8 @@ const Propose: React.FC = () => {
                     const provider = new ethers.BrowserProvider(window.ethereum);
                     await provider.send("eth_requestAccounts", []); 
                     const signer = await provider.getSigner();
-                    const address = await signer.address;
-
-                    // Try to fetch ENS name
-                    const name = await provider.lookupAddress(address);
-                    setEnsName(name || null);
+                    const addressSigner = await signer.address;
+                    setAddress(addressSigner || null);
                 } catch (error) {
                     console.error("Error fetching ENS name:", error);
                 }
@@ -97,7 +94,7 @@ const Propose: React.FC = () => {
     });
 
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-        if (!ensName) {
+        if (!address) {
             toast.error("Please log in first.");
             return;
         }
@@ -107,13 +104,9 @@ const Propose: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append("title", data.title);
-            formData.append("proposer", ensName as string);
+            formData.append("proposer", address as string);
             formData.append("description", data.desc);
             formData.append("asset", assetFile as File);
-    
-            for (const [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
     
             await ProposeApi.add(formData);
             toast.success("Asset proposed successfully!");
