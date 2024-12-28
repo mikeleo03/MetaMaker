@@ -27,18 +27,22 @@ router.post("/upload", async (req, res) => {
       return res.status(400).json({ message: "Title (name) is required!" });
     }
     if (!req.body.proposer) {
-      return res.status(400).json({ message: "Title (name) is required!" });
+      return res.status(400).json({ message: "Proposer is required!" });
+    }
+    if (!req.body.description) {
+      return res.status(400).json({ message: "Title description is required!" });
     }
 
     const file = req.files.asset;
     const title = req.body.title;
     const proposer = req.body.proposer;
+    const description = req.body.description;
 
     // Upload gambar ke Google Drive
     const driveLink = await uploadFile(file);
 
     // Panggil Oracle untuk update link ke Smart Contract
-    const txHash = await oracleUploadAsset(driveLink, title, proposer);
+    const txHash = await oracleUploadAsset(driveLink, title, proposer, description);
 
     res.status(200).json({
       message: "File uploaded and Smart Contract updated!",

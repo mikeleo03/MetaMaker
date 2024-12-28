@@ -25,9 +25,10 @@ async function oracleCreateNewPatch() {
     if (balance <= 0) {
       throw new Error("Insufficient balance to perform transaction");
     }
+    const currentTimeSecs = Math.floor(Date.now() / 1000);
 
     const patches = await contract.methods.getAllPatches().call();
-    const gasEstimate = await contract.methods.createNewPatch().estimateGas({ from: creator.address });
+    const gasEstimate = await contract.methods.createNewPatch(currentTimeSecs).estimateGas({ from: creator.address });
 
     const tx = {
       from: creator.address,
@@ -61,7 +62,7 @@ async function oracleCreateNewPatch() {
 }
 
 
-async function oracleUploadAsset(imageLink, assetName, address) {
+async function oracleUploadAsset(imageLink, assetName, address, description) {
   try {
     // const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
     // web3.eth.accounts.wallet.add(account);
@@ -79,7 +80,7 @@ async function oracleUploadAsset(imageLink, assetName, address) {
     const currentTime = Math.floor(Date.now() / 1000);
     const assetNameHex = web3.utils.leftPad(web3.utils.asciiToHex(assetName), 64);
 
-    const uploadAssetTx = await currentPatchContract.methods.uploadAsset(address, assetNameHex, imageLink, currentTime);
+    const uploadAssetTx = await currentPatchContract.methods.uploadAsset(address, assetNameHex, imageLink, description, currentTime);
     const gasEstimate = await uploadAssetTx.estimateGas({ from: address });
     const nonce = await web3.eth.getTransactionCount(address);
     const tx = {
@@ -139,8 +140,9 @@ async function oracleDeclareWinner() {
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
     const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentTimeSecs = Math.floor(Date.now() / 1000);
 
-    const declareWinnerTx = await currentPatchContract.methods.declareWinner().call();
+    const declareWinnerTx = await currentPatchContract.methods.declareWinner(currentTimeSecs).call();
     return declareWinnerTx;
   } catch (error) {
     console.error("Error sending transaction:", error);
