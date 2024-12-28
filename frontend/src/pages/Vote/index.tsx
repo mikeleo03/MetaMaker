@@ -9,40 +9,9 @@ import { VOTE_DURATION } from '@/constant';
 // import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
-import { AssetResponse } from '@/types';
+import { GameAsset, AssetResponse } from '@/types';
+import { convertGoogleDriveLink, hexToReadableString } from '@/utils';
 import VoteApi from '@/api/vote-api';
-
-interface GameAsset {
-    id: number;
-    image: string;
-    title: string;
-    proposer: string;
-    description: string;
-}
-
-/* const gameAssets: GameAsset[] = [
-    {
-        id: 1,
-        image: logoWhite,
-        title: 'Warrior Blade',
-        proposer: 'Alex Johnson',
-        description: 'The Warrior Blade is a legendary weapon forged in the depths of Mount Tyrion. This razor-sharp blade is said to be imbued with the spirit of ancient warriors, granting its wielder unmatched strength and agility. With intricate runes etched along its edge, the blade emits a faint glow during combat, symbolizing its immense power.',
-    },
-    {
-        id: 2,
-        image: logoWhite,
-        title: 'Mystic Orb',
-        proposer: 'Sarah Lin',
-        description: 'The Mystic Orb is an enigmatic artifact pulsating with otherworldly energy. Crafted from an unknown crystalline substance, it radiates an ethereal glow and constantly shifts its color. Legends claim the orb can amplify magical abilities, allowing the user to manipulate the elements and foresee glimpses of the future.',
-    },
-    {
-        id: 3,
-        image: logoWhite,
-        title: 'Shadow Cloak',
-        proposer: 'David Kim',
-        description: 'The Shadow Cloak is a mysterious garment woven from the fabric of twilight. It grants its wearer the ability to vanish into shadows, moving unseen and unheard. The cloak is adorned with subtle patterns that shimmer faintly under moonlight, reflecting the quiet elegance of its elusive nature.',
-    },
-]; */
 
 const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,30 +27,16 @@ const Vote: React.FC = () => {
         const fetchAssets = async () => {
             try {
                 const assetsResponse: AssetResponse[] = await VoteApi.all();
-                
-                // Helper function to convert a hex string to a readable string
-                const hexToReadableString = (hex: string): string => {
-                    // Remove the "0x" prefix if present
-                    const cleanHex = hex.startsWith("0x") ? hex.slice(2) : hex;
-                    // Convert hex to characters and filter out null characters
-                    return cleanHex
-                        .match(/.{2}/g) // Split into pairs of two characters
-                        ?.map(byte => String.fromCharCode(parseInt(byte, 16)))
-                        .filter(char => char !== "\u0000") // Remove null characters
-                        .join("")
-                        .trim() || ""; // Trim whitespace and join characters
-                };
 
-                // converting to format
+                // Converting to format
                 const assetClean: GameAsset[] = assetsResponse.map((asset, index) => ({
-                    id: index + 1, // Generating a unique ID based on index
-                    image: asset.link, // Assuming `link` contains the image URL
-                    title: hexToReadableString(asset.name), // Convert hex title to readable string
+                    id: index + 1, // Generating a unique ID
+                    image: convertGoogleDriveLink(asset.link),
+                    title: hexToReadableString(asset.name),
                     proposer: asset.creator,
                     description: asset.desc,
                 }));
 
-                console.log(assetClean);
                 setGameAssets(assetClean);
             } catch (error) {
                 console.error('Failed to fetch data:', error);
@@ -316,11 +271,13 @@ const Vote: React.FC = () => {
                 </div>
 
                 {/* Glassmorphism Info Section */}
-                {currentAsset && <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
-                    <h1 className="text-3xl font-bold mb-0">{currentAsset.title}</h1>
-                    <p className="mt-2">Proposed by: {currentAsset.proposer}</p>
-                    <p className="mt-2 md:text-sm text-gray-300">{currentAsset.description}</p>
-                </div>}
+                {currentAsset && (
+                    <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
+                        <h1 className="text-3xl font-bold mb-0 break-words">{currentAsset.title}</h1>
+                        <p className="mt-2 break-words">Proposed by: {currentAsset.proposer}</p>
+                        <p className="mt-2 md:text-sm text-gray-300 break-words">{currentAsset.description}</p>
+                    </div>
+                )}
             </div>
 
             {/* Vote Button */}
