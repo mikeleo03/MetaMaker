@@ -9,12 +9,12 @@ const fs = require('fs');
 const router = express.Router();
 router.post("/vote", async (req, res) => {
   try {
-    const { assetIdx } = req.body;
+    const { proposer, assetIdx } = req.body;
     if (assetIdx === undefined || assetIdx === null) {
       return res.status(400).json({ message: "Asset ID is required." });
     }
 
-    const result = await oracleVote(assetIdx);
+    const result = await oracleVote(proposer, assetIdx);
     res.status(200).json({
       message: "Vote successful.",
       data: result,
