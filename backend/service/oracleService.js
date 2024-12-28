@@ -93,9 +93,8 @@ async function oracleUploadAsset(imageLink, assetName, address, description) {
       data: uploadAssetTx.encodeABI(),
     };
 
-    const signedTx = await web3.eth.accounts.signTransaction(tx, `0x${privateKey}`);
-    console.log(signedTx)
-    const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    const receipt = await web3.eth.sendTransaction(tx);
+    console.log("Transaction successful:", receipt);
 
     console.log("Transaction successful:", receipt);
     return receipt.transactionHash;

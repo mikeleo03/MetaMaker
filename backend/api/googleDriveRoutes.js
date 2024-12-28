@@ -49,7 +49,7 @@ router.post("/upload", async (req, res) => {
       transactionHash: txHash,
     });
   } catch (error) {
-    await deleteFileFromLink(driveLink)
+    // await deleteFileFromLink(driveLink)
     console.error("Error:", error);
     res.status(500).json({ message:"Failed to process request", error: error.message });
   }
