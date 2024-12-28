@@ -21,10 +21,7 @@ async function oracleCreateNewPatch() {
     web3.eth.accounts.wallet.add(account);
 
     const creator = web3.eth.accounts.privateKeyToAccount(`0x${process.env.CREATOR_KEY}`);
-    console.log("Creator:", creator.address);
-
     const balance = await web3.eth.getBalance(creator.address);
-    console.log("Balance:", balance);
     if (balance <= 0) {
       throw new Error("Insufficient balance to perform transaction");
     }
@@ -40,14 +37,11 @@ async function oracleCreateNewPatch() {
     };
 
     const receipt = await web3.eth.sendTransaction(tx);
-
     const parsedReceipt = {
       transactionHash: receipt.transactionHash,
       gasUsed: receipt.gasUsed.toString(),
       status: receipt.status,
     };
-
-    console.log("Transaction Receipt:", parsedReceipt);
 
     return {
       success: true,
@@ -67,10 +61,10 @@ async function oracleCreateNewPatch() {
 }
 
 
-async function oracleUploadAsset(imageLink, assetName) {
+async function oracleUploadAsset(imageLink, assetName, address) {
   try {
-    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
-    web3.eth.accounts.wallet.add(account);
+    // const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
+    // web3.eth.accounts.wallet.add(account);
 
     const patches = await contract.methods.getAllPatches().call();
     if (patches.length == 0) {
@@ -85,11 +79,11 @@ async function oracleUploadAsset(imageLink, assetName) {
     const currentTime = Math.floor(Date.now() / 1000);
     const assetNameHex = web3.utils.leftPad(web3.utils.asciiToHex(assetName), 64);
 
-    const uploadAssetTx = await currentPatchContract.methods.uploadAsset(account.address, assetNameHex, imageLink, currentTime);
-    const gasEstimate = await uploadAssetTx.estimateGas({ from: account.address });
-    const nonce = await web3.eth.getTransactionCount(account.address);
+    const uploadAssetTx = await currentPatchContract.methods.uploadAsset(address, assetNameHex, imageLink, currentTime);
+    const gasEstimate = await uploadAssetTx.estimateGas({ from: address });
+    const nonce = await web3.eth.getTransactionCount(address);
     const tx = {
-      from: account.address,
+      from: address,
       to: currentPatchAddress[0],
       gas: gasEstimate,
       nonce: nonce,
@@ -112,9 +106,6 @@ async function oracleUploadAsset(imageLink, assetName) {
 
 async function oracleGetAllAssets() {
   try {
-    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
-    web3.eth.accounts.wallet.add(account);
-
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
     const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
@@ -127,17 +118,14 @@ async function oracleGetAllAssets() {
   }
 }
 
-async function oracleVote(assetIdx) {
+async function oracleVote(address, assetIdx) {
   try {
-    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
-    web3.eth.accounts.wallet.add(account);
-
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
     const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
     const currentTimeSecs = Math.floor(Date.now() / 1000);
 
-    const voteTx = await currentPatchContract.methods.vote(account.address, assetIdx, currentTimeSecs).call();
+    const voteTx = await currentPatchContract.methods.vote(address, assetIdx, currentTimeSecs).call();
     return voteTx;
   } catch (error) {
     console.error("Error sending transaction:", error);
@@ -148,9 +136,6 @@ async function oracleVote(assetIdx) {
 
 async function oracleDeclareWinner() {
   try {
-    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
-    web3.eth.accounts.wallet.add(account);
-
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
     const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);

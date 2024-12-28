@@ -13,20 +13,32 @@ router.delete("/file" , async (req, res) => {
     });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Failed to process request");
+    res.status(500).json({ message:"Failed to process request", error: error.message });
   }
 
 })
 
 router.post("/upload", async (req, res) => {
   try {
-    const { file } = req.files;
+    if (!req.files || !req.files.asset) {
+      return res.status(400).json({ message: "No file uploaded!" });
+    }
+    if (!req.body.title) {
+      return res.status(400).json({ message: "Title (name) is required!" });
+    }
+    if (!req.body.proposer) {
+      return res.status(400).json({ message: "Title (name) is required!" });
+    }
+
+    const file = req.files.asset;
+    const title = req.body.title;
+    const proposer = req.body.proposer;
 
     // Upload gambar ke Google Drive
     const driveLink = await uploadFile(file);
 
     // Panggil Oracle untuk update link ke Smart Contract
-    const txHash = await oracleUploadAsset(driveLink, file.name.split('.').slice(0, -1).join('.'));
+    const txHash = await oracleUploadAsset(driveLink, title, proposer);
 
     res.status(200).json({
       message: "File uploaded and Smart Contract updated!",
@@ -35,7 +47,7 @@ router.post("/upload", async (req, res) => {
   } catch (error) {
     await deleteFileFromLink(driveLink)
     console.error("Error:", error);
-    res.status(500).send("Failed to process request");
+    res.status(500).json({ message:"Failed to process request", error: error.message });
   }
 });
 
@@ -51,7 +63,7 @@ router.get("/assets", async (req, res) => {
     res.status(200).json(processedAssets);
   } catch (error) {
     console.error("Error fetching assets:", error);
-    res.status(500).send("Failed to fetch assets");
+    res.status(500).json({ message:"Failed to fetch assets", error: error.message });
   }
 });
 
@@ -61,7 +73,7 @@ router.delete("/files", async (req, res) => {
       res.status(200).json({ message: "All files deleted successfully." });
   } catch (error) {
       console.error("Error deleting all files:", error);
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message:"Failed to process request", error: error.message });
   }
 });
 

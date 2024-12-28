@@ -29,7 +29,7 @@ router.post("/vote", async (req, res) => {
   }
 })
 
-router.post("/win", async (req, res) => {
+router.get("/win", async (req, res) => {
     try {
         const winner = await oracleDeclareWinner();
         const fileId = winner.link.split("/d/")[1].split("/")[0]; 
