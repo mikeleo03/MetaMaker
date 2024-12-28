@@ -1,8 +1,22 @@
 const express = require("express");
-const { uploadFile, getAllFiles, deleteAllFiles } = require("../service/googleDriveService");
+const { uploadFile, getAllFiles, deleteFileFromLink, deleteAllFiles } = require("../service/googleDriveService");
 const { oracleUploadAsset, oracleGetAllAssets } = require("../service/oracleService");
 
 const router = express.Router();
+
+router.delete("/file" , async (req, res) => {
+  try {
+    const link = req.body.link
+    await deleteFileFromLink(link)
+    res.status(200).json({
+      message: "done"
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Failed to process request");
+  }
+
+})
 
 router.post("/upload", async (req, res) => {
   try {
@@ -19,6 +33,7 @@ router.post("/upload", async (req, res) => {
       transactionHash: txHash,
     });
   } catch (error) {
+    await deleteFileFromLink(driveLink)
     console.error("Error:", error);
     res.status(500).send("Failed to process request");
   }

@@ -74,6 +74,27 @@ async function getAllFiles() {
     }
 }
 
+async function deleteFileFromLink(link) {
+    try {
+        // Ekstrak file ID dari link
+        const fileId = link.split("/d/")[1]?.split("/")[0];
+        if (!fileId) {
+            throw new Error("Invalid link format. Cannot extract file ID.");
+        }
+
+        // Hapus file menggunakan file ID
+        await drive.files.delete({
+            fileId: fileId,
+        });
+
+        console.log(`File with ID ${fileId} deleted successfully.`);
+        return { success: true, message: "File deleted successfully." };
+    } catch (error) {
+        console.error("Error deleting file from link:", error.message);
+        return { success: false, message: "Failed to delete file.", error: error.message };
+    }
+}
+
 async function deleteAllFiles() {
     try {
         const files = await getAllFiles();
@@ -124,4 +145,4 @@ async function downloadFile(fileId, destinationPath) {
     }
 }
 
-module.exports = { getFileMetadata, uploadFile, getAllFiles, deleteAllFiles, downloadFile };
+module.exports = { getFileMetadata, uploadFile, getAllFiles, deleteFileFromLink, deleteAllFiles, downloadFile };
