@@ -7,14 +7,15 @@ contract Patch {
     uint256 public startPatchTime;
     uint256 public startVoteTime;
     uint256 public endPatchTime;
-    uint256 public constant UPLOAD_PERIOD = 1036800;
-    uint256 public constant VOTING_PERIOD = 172800;
+    uint256 constant UPLOAD_PERIOD = 1036800;
+    uint256 constant VOTING_PERIOD = 172800;
 
     struct Asset {
         address creator;
         uint256 patchId;
         bytes32 name;
         string link;
+        string desc;
         uint256 voteCount;
     }
 
@@ -38,10 +39,11 @@ contract Patch {
         endPatchTime = startVoteTime + VOTING_PERIOD;
     }
 
-    function uploadAsset(address _uploader, bytes32 _assetName, string memory _assetLink, uint256 _currTimeSecs) public {
+    function uploadAsset(address _uploader, bytes32 _assetName, string memory _assetLink, string memory _desc, uint256 _currTimeSecs) public {
         require(_currTimeSecs >= startPatchTime && _currTimeSecs < startVoteTime, "Not in upload period");
         require(!participants[_uploader].hasUploaded, "Uploader has uploaded an asset this patch");
-        Asset memory newAsset = Asset(_uploader, patchId, _assetName, _assetLink, 0);
+        require(_uploader == msg.sender, "uploader and message sender not the same");
+        Asset memory newAsset = Asset(_uploader, patchId, _assetName, _assetLink, _desc, 0);
         participants[_uploader].hasUploaded = true;
         allAssets.push(newAsset);
         emit Uploaded(_uploader, newAsset);
@@ -56,13 +58,14 @@ contract Patch {
         require(!participants[_voter].hasVoted, "Uploader has voted for an asset this patch");
         require(!(allAssets[_assetIdx].creator == _voter), "Voter can't vote for their own asset");
         require(_assetIdx >= 0 && _assetIdx < allAssets.length, "Index invalid");
+        require(_voter == msg.sender, "voter and message sender not the same");
         participants[_voter].hasVoted = true;
         allAssets[_assetIdx].voteCount += 1;
         emit Voted(_voter, _assetIdx);
     }
 
-    function declareWinner() public view returns (Asset memory) {
-        require(block.timestamp > endPatchTime, "Patch has not ended");
+    function declareWinner(uint256 currTime) public view returns (Asset memory) {
+        require(currTime >= endPatchTime, "Patch has not ended");
         require(allAssets.length > 0, "No assets were uploaded this patch");
 
         Asset memory winner = allAssets[0];
