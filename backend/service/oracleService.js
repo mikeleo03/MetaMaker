@@ -15,6 +15,58 @@ const contract = new web3.eth.Contract(patchHistoryABI, contractAddress);
 
 const privateKey = process.env.PRIVATE_KEY;
 
+async function oracleCreateNewPatch() {
+  try {
+    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
+    web3.eth.accounts.wallet.add(account);
+
+    const creator = web3.eth.accounts.privateKeyToAccount(`0x${process.env.CREATOR_KEY}`);
+    console.log("Creator:", creator.address);
+
+    const balance = await web3.eth.getBalance(creator.address);
+    console.log("Balance:", balance);
+    if (balance <= 0) {
+      throw new Error("Insufficient balance to perform transaction");
+    }
+
+    const patches = await contract.methods.getAllPatches().call();
+    const gasEstimate = await contract.methods.createNewPatch().estimateGas({ from: creator.address });
+
+    const tx = {
+      from: creator.address,
+      to: contractAddress,
+      data: contract.methods.createNewPatch().encodeABI(),
+      gas: gasEstimate,
+    };
+
+    const receipt = await web3.eth.sendTransaction(tx);
+
+    const parsedReceipt = {
+      transactionHash: receipt.transactionHash,
+      gasUsed: receipt.gasUsed.toString(),
+      status: receipt.status,
+    };
+
+    console.log("Transaction Receipt:", parsedReceipt);
+
+    return {
+      success: true,
+      message: "New patch created successfully",
+      transactionHash: parsedReceipt.transactionHash,
+      gasUsed: parsedReceipt.gasUsed,
+      patchesCount: patches.length + 1, 
+    };
+  } catch (error) {
+    console.error("Error creating new patch:", error.message);
+    return {
+      success: false,
+      message: "Failed to create new patch",
+      error: error.message,
+    };
+  }
+}
+
+
 async function oracleUploadAsset(imageLink, assetName) {
   try {
     const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
@@ -23,8 +75,7 @@ async function oracleUploadAsset(imageLink, assetName) {
     const patches = await contract.methods.getAllPatches().call();
     if (patches.length == 0) {
       // Create a new patch
-      const creator = web3.eth.accounts.privateKeyToAccount(`0x${process.env.CREATOR_KEY}`).address
-      await contract.methods.createNewPatch().send({ from: creator });
+      const res = await oracleCreateNewPatch();
     }
     
     const currPatchIndex = await contract.methods.currPatch().call();
@@ -93,4 +144,4 @@ async function oracleDeclareWinner() {
   }
 }
 
-module.exports = { oracleUploadAsset, oracleGetAllAssets, oracleDeclareWinner }
+module.exports = { oracleCreateNewPatch, oracleUploadAsset, oracleGetAllAssets, oracleDeclareWinner }

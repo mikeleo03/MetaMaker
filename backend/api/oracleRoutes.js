@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const GithubService = require("../service/githubService");
 const { deleteAllFiles, downloadFile, getFileMetadata } = require("../service/googleDriveService");
-const { oracleDeclareWinner } = require("../service/oracleService");
+const { oracleCreateNewPatch, oracleDeclareWinner } = require("../service/oracleService");
 const path = require('path');
 const fs = require('fs');
 
@@ -34,5 +34,20 @@ router.post("/win", async (req, res) => {
         res.status(500).json({ message: "Failed to process winner", error: error.message });
     }
 })
+
+router.post("/patch", async (req, res) => {
+    try {
+      const result = await oracleCreateNewPatch();
+  
+      if (result.success) {
+        res.status(200).json(result);
+      } else {
+        res.status(400).json(result);
+      }
+    } catch (error) {
+      console.error("Error in /patch route:", error.message);
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+  });
 
 module.exports = router;
