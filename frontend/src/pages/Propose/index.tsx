@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Particles } from "@/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTimer } from '@/contexts/TimerContext';
+import { useWallet } from '@/contexts/WalletContext';
 import { PROPOSE_DURATION } from '@/constant';
 
 import { toast } from "react-toastify";
@@ -18,10 +19,36 @@ import { LuAlarmClock } from "react-icons/lu";
 import { FaFileImage } from "react-icons/fa6";
 import { Trash2, Upload, Loader2 } from "lucide-react";
 
+import { ethers } from 'ethers';
+import { ProposeApi } from "@/api";
+
 const Propose: React.FC = () => {
     const { phase, remainingTime } = useTimer();
+    const { account } = useWallet();
+    const [ensName, setEnsName] = useState<string | null>(null);
     const [countdownTime, setCountdownTime] = useState<number>(0);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchENSName = async () => {
+            if (account) {
+                try {
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []); 
+                    const signer = await provider.getSigner();
+                    const address = await signer.address;
+
+                    // Try to fetch ENS name
+                    const name = await provider.lookupAddress(address);
+                    setEnsName(name || null);
+                } catch (error) {
+                    console.error("Error fetching ENS name:", error);
+                }
+            }
+        };
+
+        fetchENSName();
+    }, [account]);
     
     useEffect(() => {
         if (phase !== 'propose') {
@@ -49,7 +76,6 @@ const Propose: React.FC = () => {
 
     const [onUpdate, setOnUpdate] = useState(false);
     const [assetFile, setAssetFile] = useState<File | null>(null);
-    const [assetBase64, setAssetBase64] = useState("");
     const [assetUploaded, setAssetUploaded] = useState(false);
     const [assetUploadProgress, setAssetUploadProgress] = useState(0);
     const [assetPreviewUrl, setAssetPreviewUrl] = useState<string | null>(null);
@@ -63,7 +89,7 @@ const Propose: React.FC = () => {
 
     const form = useForm({
         resolver: zodResolver(FormSchema),
-            defaultValues: {
+        defaultValues: {
             title: "",
             desc: "",
             asset: undefined
@@ -71,24 +97,36 @@ const Propose: React.FC = () => {
     });
 
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+        if (!ensName) {
+            toast.error("Please log in first.");
+            return;
+        }
+    
         setOnUpdate(true);
+    
         try {
-            const payload = {
-                title: data.title,
-                description: data.desc,
-                asset: assetFile ? assetBase64 : '',
-            };
-            
-            // send the payload to backend
-            console.log(payload);
-
-        } catch (error) {
-            console.error("Submit error:", error);
-            toast.error(error as String || 'Server is unreachable. Please try again later.');
+            const formData = new FormData();
+            formData.append("title", data.title);
+            formData.append("proposer", ensName as string);
+            formData.append("description", data.desc);
+            formData.append("asset", assetFile as File);
+    
+            for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+    
+            await ProposeApi.add(formData);
+            toast.success("Asset proposed successfully!");
+        } catch (error: any) {
+            console.error("Course failed to be added:", error);
+            toast.error(
+                (error.response?.data as { message: string })?.message ||
+                "Server is unreachable. Please try again later."
+            );
         } finally {
             setOnUpdate(false);
         }
-    };
+    };        
     
     const handleAssetFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
@@ -111,11 +149,8 @@ const Propose: React.FC = () => {
     
             reader.onloadend = () => {
                 if (reader.result) {
-                    const base64String = reader.result as string;
-                    console.log(base64String);
                     // Update the state
                     setAssetUploaded(true);
-                    setAssetBase64(base64String);
                     toast.success("Asset added successfully");
                 }
             };
@@ -382,7 +417,14 @@ const Propose: React.FC = () => {
                             className="text-lg bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white transition-transform duration-300 transform hover:scale-105 rounded-3xl px-10 font-semibold py-3 mb-16"
                             disabled={onUpdate}
                         >
-                            {onUpdate ? <Loader2 className="animate-spin" /> : "Save Asset"}
+                            {onUpdate ? (
+                                <>
+                                    <Loader2 className="animate-spin inline-block mr-2" /> 
+                                    Proposing
+                                </>
+                            ) : (
+                                "Propose Asset"
+                            )}
                         </Button>
                     </div>
                 </form>

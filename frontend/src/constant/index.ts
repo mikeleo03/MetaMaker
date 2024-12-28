@@ -2,9 +2,12 @@ import img1 from "@/assets/images/img1.jpg";
 import img2 from "@/assets/images/img2.jpg";
 import img3 from "@/assets/images/img3.jpg";
 
+// API URL
+export const API_URL_LOCAL = "http://localhost:5000/api";
+
 // Propose and Vote time constraint
-export const PROPOSE_DURATION = 0.5 * 60; // 5 minutes in seconds
-export const VOTE_DURATION = 0.25 * 60; // 2 minutes in seconds;
+export const PROPOSE_DURATION = 5 * 60; // 5 minutes in seconds
+export const VOTE_DURATION = 2 * 60; // 2 minutes in seconds;
 
 // Homepage data
 export const featureItems = [
