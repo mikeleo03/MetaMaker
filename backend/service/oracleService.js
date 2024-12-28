@@ -33,7 +33,7 @@ async function oracleCreateNewPatch() {
     const tx = {
       from: creator.address,
       to: contractAddress,
-      data: contract.methods.createNewPatch().encodeABI(),
+      data: contract.methods.createNewPatch(currentTimeSecs).encodeABI(),
       gas: gasEstimate,
     };
 
@@ -107,6 +107,10 @@ async function oracleUploadAsset(imageLink, assetName, address, description) {
 
 async function oracleGetAllAssets() {
   try {
+    const patches = await contract.methods.getAllPatches().call();
+    if (patches.length == 0) {
+      return [];
+    }
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
     const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
