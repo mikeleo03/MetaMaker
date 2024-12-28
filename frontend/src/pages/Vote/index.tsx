@@ -6,9 +6,11 @@ import { Particles } from '@/components';
 import { useTimer } from '@/contexts/TimerContext';
 import { VOTE_DURATION } from '@/constant';
 
-import logoWhite from "@/assets/logos/logo.png";
+// import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
+import { AssetResponse } from '@/types';
+import VoteApi from '@/api/vote-api';
 
 interface GameAsset {
     id: number;
@@ -18,7 +20,7 @@ interface GameAsset {
     description: string;
 }
 
-const gameAssets: GameAsset[] = [
+/* const gameAssets: GameAsset[] = [
     {
         id: 1,
         image: logoWhite,
@@ -40,16 +42,54 @@ const gameAssets: GameAsset[] = [
         proposer: 'David Kim',
         description: 'The Shadow Cloak is a mysterious garment woven from the fabric of twilight. It grants its wearer the ability to vanish into shadows, moving unseen and unheard. The cloak is adorned with subtle patterns that shimmer faintly under moonlight, reflecting the quiet elegance of its elusive nature.',
     },
-];
+]; */
 
 const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [countdownTime, setCountdownTime] = useState<number>(0);
+    const [gameAssets, setGameAssets] = useState<GameAsset[]>([]);
     const [showWinner, setShowWinner] = useState(false);
     const [winner, setWinner] = useState<GameAsset | null>(null);
     const { phase, remainingTime } = useTimer();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchAssets = async () => {
+            try {
+                const assetsResponse: AssetResponse[] = await VoteApi.all();
+                
+                // Helper function to convert a hex string to a readable string
+                const hexToReadableString = (hex: string): string => {
+                    // Remove the "0x" prefix if present
+                    const cleanHex = hex.startsWith("0x") ? hex.slice(2) : hex;
+                    // Convert hex to characters and filter out null characters
+                    return cleanHex
+                        .match(/.{2}/g) // Split into pairs of two characters
+                        ?.map(byte => String.fromCharCode(parseInt(byte, 16)))
+                        .filter(char => char !== "\u0000") // Remove null characters
+                        .join("")
+                        .trim() || ""; // Trim whitespace and join characters
+                };
+
+                // converting to format
+                const assetClean: GameAsset[] = assetsResponse.map((asset, index) => ({
+                    id: index + 1, // Generating a unique ID based on index
+                    image: asset.link, // Assuming `link` contains the image URL
+                    title: hexToReadableString(asset.name), // Convert hex title to readable string
+                    proposer: asset.creator,
+                    description: asset.desc,
+                }));
+
+                console.log(assetClean);
+                setGameAssets(assetClean);
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            }
+        };
+
+        fetchAssets();
+    }, []);
 
     useEffect(() => {
         if (phase !== 'vote') {
@@ -257,14 +297,14 @@ const Vote: React.FC = () => {
                     </button>
 
                     {/* Floating Asset */}
-                    <motion.img
+                    {currentAsset && <motion.img
                         src={currentAsset.image}
                         alt={currentAsset.title}
                         className="md:w-60 w-36 z-30 object-contain mx-8"
                         initial={{ y: 0 }}
                         animate={{ y: [0, -20, 0] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                    />
+                    />}
 
                     {/* Next Button */}
                     <button
@@ -276,11 +316,11 @@ const Vote: React.FC = () => {
                 </div>
 
                 {/* Glassmorphism Info Section */}
-                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
+                {currentAsset && <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
                     <h1 className="text-3xl font-bold mb-0">{currentAsset.title}</h1>
                     <p className="mt-2">Proposed by: {currentAsset.proposer}</p>
                     <p className="mt-2 md:text-sm text-gray-300">{currentAsset.description}</p>
-                </div>
+                </div>}
             </div>
 
             {/* Vote Button */}
