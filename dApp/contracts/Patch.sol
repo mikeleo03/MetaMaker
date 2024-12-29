@@ -7,8 +7,8 @@ contract Patch {
     uint256 public startPatchTime;
     uint256 public startVoteTime;
     uint256 public endPatchTime;
-    uint256 constant UPLOAD_PERIOD = 1036800;
-    uint256 constant VOTING_PERIOD = 172800;
+    uint256 constant UPLOAD_PERIOD = 300;
+    uint256 constant VOTING_PERIOD = 120;
 
     struct Asset {
         address creator;

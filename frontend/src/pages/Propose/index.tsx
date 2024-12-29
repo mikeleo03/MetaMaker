@@ -20,6 +20,7 @@ import { FaFileImage } from "react-icons/fa6";
 import { Trash2, Upload, Loader2 } from "lucide-react";
 
 import { ProposeApi } from "@/api";
+import { formatTime } from '@/utils';
 
 const Propose: React.FC = () => {
     const { phase, remainingTime } = useTimer();
@@ -60,12 +61,6 @@ const Propose: React.FC = () => {
         setCountdownTime(remainingTime);
     }, [remainingTime]);
 
-    const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-    };
-
     const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100 MB
     const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
@@ -100,7 +95,6 @@ const Propose: React.FC = () => {
         setOnUpdate(true);
     
         try {
-            console.log(address);
             const formData = new FormData();
             formData.append("title", data.title);
             formData.append("proposer", address as string);
@@ -255,7 +249,7 @@ const Propose: React.FC = () => {
                                         style={{ width: `${(remainingTime / PROPOSE_DURATION) * 100}%` }}
                                     ></div>
                                 </div>
-                                <div className="flex items-center text-white text-lg space-x-2">
+                                <div className="md:w-28 w-44 flex items-center text-white text-lg space-x-2">
                                     <span><LuAlarmClock /></span>
                                     <span>{formatTime(remainingTime)}</span>
                                 </div>

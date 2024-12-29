@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { Particles } from '@/components';
-import { Button } from "@/components/ui/button";
 import { useTimer } from '@/contexts/TimerContext';
 import { useWallet } from '@/contexts/WalletContext';
 import { VOTE_DURATION } from '@/constant';
@@ -12,8 +11,8 @@ import { VOTE_DURATION } from '@/constant';
 import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
 import { GameAsset, AssetResponse, VoteRequest } from '@/types';
-import { convertGoogleDriveLink, hexToReadableString } from '@/utils';
-import VoteApi from '@/api/vote-api';
+import { convertGoogleDriveLink, hexToReadableString, formatTime } from '@/utils';
+import { VoteApi } from '@/api';
 
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
@@ -125,13 +124,7 @@ const Vote: React.FC = () => {
             });
 
         // setWinner(gameAssets[currentIndex]);
-    };
-
-    const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-    }
+    };    
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'ArrowLeft') {
@@ -265,7 +258,7 @@ const Vote: React.FC = () => {
             <div className="md:absolute md:mt-0 mt-[12vh] md:bottom-12 md:left-16 flex flex-col items-start gap-2 z-30 bg-blue-500/10 border border-blue-500 backdrop-blur-md md:rounded-3xl p-6 md:px-8 pl-10 md:w-auto w-full text-white">
                 <div className='text-xl font-bold'>Remaining Time</div>
                 <div className='flex items-center space-x-4'>
-                    <div className="md:w-64 w-52 bg-gray-800 rounded-full overflow-hidden h-4">
+                    <div className="md:w-64 w-48 bg-gray-800 rounded-full overflow-hidden h-4">
                         <div
                             className="bg-blue-500 h-full"
                             style={{ width: `${(remainingTime / VOTE_DURATION) * 100}%` }}
@@ -330,7 +323,7 @@ const Vote: React.FC = () => {
 
             {/* Vote Button */}
             <div className="md:absolute md:bottom-10 z-30 md:right-8 md:mb-0 mb-10">
-                <Button
+                <button
                     onClick={voteAsset}
                     className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105"
                     disabled={gameAssets.length == 0 && onUpdate}
@@ -343,7 +336,7 @@ const Vote: React.FC = () => {
                     ) : (
                         "Vote"
                     )}
-                </Button>
+                </button>
             </div>
 
             {/* Shine Animation */}

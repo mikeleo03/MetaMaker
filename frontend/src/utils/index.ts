@@ -16,3 +16,19 @@ export const convertGoogleDriveLink = (url: string): string => {
     const match = url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
     return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
 };
+
+// Helper function to format time for countdown view
+export const formatTime = (seconds: number): string => {
+    const days = Math.floor(seconds / (24 * 60 * 60));
+    const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
+    const minutes = Math.floor((seconds % (60 * 60)) / 60);
+    const secs = seconds % 60;
+
+    if (days > 0) {
+        return `${days < 10 ? '0' : ''}${days}d ${hours < 10 ? '0' : ''}${hours}h`;
+    } else if (hours > 0) {
+        return `${hours < 10 ? '0' : ''}${hours}h ${minutes < 10 ? '0' : ''}${minutes}m`;
+    } else {
+        return `${minutes < 10 ? '0' : ''}${minutes}m ${secs < 10 ? '0' : ''}${secs}s`;
+    }
+};

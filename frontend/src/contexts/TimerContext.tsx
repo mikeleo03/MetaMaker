@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { PROPOSE_DURATION, VOTE_DURATION } from '@/constant';
+import { PhaseApi } from '@/api';
 
 type Phase = 'propose' | 'vote';
 
@@ -18,17 +19,31 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Initialize stored state
     useEffect(() => {
-        const storedStartTime = localStorage.getItem('startTime');
-        const storedPhase = localStorage.getItem('phase');
-
-        if (storedStartTime && storedPhase) {
-            setStartTime(parseInt(storedStartTime, 10));
-            setPhase(storedPhase as Phase);
-        } else {
-            localStorage.setItem('startTime', String(Date.now()));
-            localStorage.setItem('phase', 'propose');
-        }
-    }, []);
+        const fetchPhase = async () => {
+            try {
+                const phaseResponse: { startTime: string } = await PhaseApi.get(); // Receive string
+                const startTimeParsed = Number(BigInt(phaseResponse.startTime)); // Parse to BigInt, then Number
+                setStartTime(startTimeParsed);
+    
+                console.log(startTimeParsed * 1000); // Debugging the parsed value
+    
+                // Determining the phase
+                const currentTime = Date.now();
+                console.log(currentTime);
+                console.log(startTimeParsed * 1000 + PROPOSE_DURATION * 1000);
+                if (currentTime <= (startTimeParsed + PROPOSE_DURATION) * 1000) {
+                    setPhase('propose');
+                } else {
+                    setStartTime((startTimeParsed + PROPOSE_DURATION) * 1000);
+                    setPhase('vote');
+                }
+            } catch (error) {
+                console.error("Error fetching Phase:", error);
+            }
+        };
+    
+        fetchPhase();
+    }, []);    
 
     // Handle timer logic and phase transitions
     useEffect(() => {
@@ -58,8 +73,6 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         const now = Date.now();
         setStartTime(now);
-        localStorage.setItem('phase', newPhase);
-        localStorage.setItem('startTime', String(now));
     };
 
     return (
