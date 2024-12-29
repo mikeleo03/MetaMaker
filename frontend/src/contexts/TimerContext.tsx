@@ -23,7 +23,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             try {
                 const phaseResponse: { startTime: string } = await PhaseApi.get(); // Receive string
                 const startTimeParsed = Number(BigInt(phaseResponse.startTime)); // Parse to BigInt, then Number
-                setStartTime(startTimeParsed);
+                setStartTime(startTimeParsed * 1000);
     
                 console.log(startTimeParsed * 1000); // Debugging the parsed value
     
@@ -31,6 +31,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 const currentTime = Date.now();
                 console.log(currentTime);
                 console.log(startTimeParsed * 1000 + PROPOSE_DURATION * 1000);
+                console.log(currentTime <= (startTimeParsed + PROPOSE_DURATION) * 1000);
                 if (currentTime <= (startTimeParsed + PROPOSE_DURATION) * 1000) {
                     setPhase('propose');
                 } else {

@@ -20,7 +20,7 @@ import { Loader2 } from "lucide-react";
 const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [onUpdate, setOnUpdate] = useState(false);
-    const [countdownTime, setCountdownTime] = useState<number>(0);
+    const [countdownTime, setCountdownTime] = useState<number>(-1);
     const [gameAssets, setGameAssets] = useState<GameAsset[]>([]);
     const [showWinner, setShowWinner] = useState(false);
     const [winner, setWinner] = useState<GameAsset | null>(null);
@@ -74,13 +74,28 @@ const Vote: React.FC = () => {
             const interval = setInterval(() => {
                 setCountdownTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
             }, 1000);
+
+            if (countdownTime === 0) {
+                fetchWinner();
+            }
+
             setShowWinner(true);
             return () => clearInterval(interval);
         } else {
             setShowWinner(false);
             setCountdownTime(remainingTime);
         }
-    }, [phase, remainingTime]);
+    }, [phase, remainingTime, countdownTime]);
+
+    const fetchWinner = async () => {
+        try {
+            const winnerResponse: GameAsset = await VoteApi.winner();
+            console.log("Winner fetched:", winnerResponse);
+            // setWinner(winnerResponse);
+        } catch (error) {
+            console.error("Failed to fetch winner:", error);
+        }
+    };
 
     useEffect(() => {
         setCountdownTime(remainingTime);
@@ -104,6 +119,7 @@ const Vote: React.FC = () => {
             proposer: address,
             assetIdx: currentIndex
         };
+        console.log(payload);
 
         setOnUpdate(true);
 
@@ -122,8 +138,6 @@ const Vote: React.FC = () => {
             .finally(() => {
                 setOnUpdate(false);
             });
-
-        // setWinner(gameAssets[currentIndex]);
     };    
 
     const handleKeyDown = (event: KeyboardEvent) => {
