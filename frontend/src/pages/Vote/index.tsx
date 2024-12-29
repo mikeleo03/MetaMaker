@@ -3,25 +3,49 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { Particles } from '@/components';
+import { Button } from "@/components/ui/button";
 import { useTimer } from '@/contexts/TimerContext';
+import { useWallet } from '@/contexts/WalletContext';
 import { VOTE_DURATION } from '@/constant';
 
 // import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
-import { GameAsset, AssetResponse } from '@/types';
+import { GameAsset, AssetResponse, VoteRequest } from '@/types';
 import { convertGoogleDriveLink, hexToReadableString } from '@/utils';
 import VoteApi from '@/api/vote-api';
 
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
+
 const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [onUpdate, setOnUpdate] = useState(false);
     const [countdownTime, setCountdownTime] = useState<number>(0);
     const [gameAssets, setGameAssets] = useState<GameAsset[]>([]);
     const [showWinner, setShowWinner] = useState(false);
     const [winner, setWinner] = useState<GameAsset | null>(null);
     const { phase, remainingTime } = useTimer();
+    const { account } = useWallet();
+    const [address, setAddress] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchAddress = async () => {
+            if (account) {
+                try {
+                    // Directly set the account from the context
+                    setAddress(account);
+                } catch (error) {
+                    console.error("Error fetching address or ENS name:", error);
+                }
+            } else {
+                setAddress(null);
+            }
+        };
+    
+        fetchAddress();
+    }, [account]);
 
     useEffect(() => {
         const fetchAssets = async () => {
@@ -71,12 +95,36 @@ const Vote: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + gameAssets.length) % gameAssets.length);
     };
     
-    const voteAsset = () => {
-        setShowConfirmation(true);
-        setWinner(gameAssets[currentIndex]);
-        setTimeout(() => {
-            setShowConfirmation(false);
-        }, 2000);
+    const voteAsset = async () => {
+        if (!address) {
+            toast.error("Please log in first.");
+            return;
+        }
+
+        const payload: VoteRequest = {
+            proposer: address,
+            assetIdx: currentIndex
+        };
+
+        setOnUpdate(true);
+
+        // Submit the response
+        await VoteApi.vote(payload)
+            .then(() => {
+                toast.success("Your vote has been submitted!");
+            })
+            .catch((error) => {
+                console.error("Vote failed to be proposed:", error);
+                toast.error(
+                    (error.response?.data as { message: string })?.message ||
+                    "Server is unreachable. Please try again later."
+                );
+            })
+            .finally(() => {
+                setOnUpdate(false);
+            });
+
+        // setWinner(gameAssets[currentIndex]);
     };
 
     const formatTime = (seconds: number) => {
@@ -282,25 +330,21 @@ const Vote: React.FC = () => {
 
             {/* Vote Button */}
             <div className="md:absolute md:bottom-10 z-30 md:right-8 md:mb-0 mb-10">
-                <button
+                <Button
                     onClick={voteAsset}
                     className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105"
+                    disabled={gameAssets.length == 0 && onUpdate}
                 >
-                Vote
-                </button>
+                    {onUpdate ? (
+                        <>
+                            <Loader2 className="animate-spin inline-block mr-2" /> 
+                            Voting
+                        </>
+                    ) : (
+                        "Vote"
+                    )}
+                </Button>
             </div>
-
-            {/* Confirmation Message */}
-            {showConfirmation && (
-                <motion.div
-                    className="absolute bottom-8 text-white bg-green-500 px-4 py-2 rounded-lg"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                >
-                Your vote has been submitted!
-                </motion.div>
-            )}
 
             {/* Shine Animation */}
             <style>{`

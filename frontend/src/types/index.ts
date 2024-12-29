@@ -8,6 +8,8 @@ export interface GameAsset {
     description: string;
 }
 
+// Backend-related Types
+// Requests and Responses
 export interface AssetResponse {
     creator: string;
     name: string;
@@ -15,5 +17,7 @@ export interface AssetResponse {
     desc: string;
 }
 
-// Backend-related Types
-// Requests and Responses
+export interface VoteRequest {
+    proposer: string;
+    assetIdx: number;
+}

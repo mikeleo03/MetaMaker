@@ -110,7 +110,7 @@ const Propose: React.FC = () => {
             await ProposeApi.add(formData);
             toast.success("Asset proposed successfully!");
         } catch (error: any) {
-            console.error("Course failed to be added:", error);
+            console.error("Asset failed to be proposed:", error);
             toast.error(
                 (error.response?.data as { message: string })?.message ||
                 "Server is unreachable. Please try again later."
