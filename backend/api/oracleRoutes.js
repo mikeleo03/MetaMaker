@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const GithubService = require("../service/githubService");
 const { deleteAllFiles, downloadFile, getFileMetadata } = require("../service/googleDriveService");
-const { oracleCreateNewPatch, oracleVote, oracleDeclareWinner } = require("../service/oracleService");
+const { oracleCreateNewPatch, oracleGetStartTime, oracleVote, oracleDeclareWinner } = require("../service/oracleService");
 const path = require('path');
 const fs = require('fs');
 
@@ -27,7 +27,19 @@ router.post("/vote", async (req, res) => {
       error: error.message,
     });
   }
-})
+});
+
+router.get("/start-time", async (req, res) => {
+  try {
+    const startTime = await oracleGetStartTime();
+    res.status(200).json({
+      startTime: startTime,
+    });
+  } catch (error) {
+    console.error("Error getting start time:", error);
+    res.status(500).json({ message: "Failed to get start time", error: error.message });
+  }
+});
 
 router.get("/win", async (req, res) => {
     try {

@@ -61,6 +61,25 @@ async function oracleCreateNewPatch() {
   }
 }
 
+async function oracleGetStartTime() {
+  try {
+    const patches = await contract.methods.getAllPatches().call();
+    if (patches.length == 0) {
+      // Create a new patch
+      const res = await oracleCreateNewPatch();
+    }
+
+    const currPatchIndex = await contract.methods.currPatch().call();
+    const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+
+    const startTime = await currentPatchContract.methods.startPatchTime().call();
+    return startTime;
+  } catch (error) {
+    console.error("Error getting start time:", error);
+    throw new Error("Failed to get patch start time.");
+  }
+}
 
 async function oracleUploadAsset(imageLink, assetName, address, description) {
   try {
@@ -153,4 +172,4 @@ async function oracleDeclareWinner() {
   }
 }
 
-module.exports = { oracleCreateNewPatch, oracleUploadAsset, oracleGetAllAssets, oracleDeclareWinner, oracleVote }
+module.exports = { oracleCreateNewPatch, oracleGetStartTime, oracleUploadAsset, oracleGetAllAssets, oracleDeclareWinner, oracleVote }
