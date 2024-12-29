@@ -70,26 +70,25 @@ const Vote: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (phase !== 'vote') {
-            const interval = setInterval(() => {
-                setCountdownTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
-            }, 1000);
-
-            if (countdownTime === 0) {
-                fetchWinner();
-            }
-
-            setShowWinner(true);
-            return () => clearInterval(interval);
-        } else {
+        if (phase === 'vote') {
             setShowWinner(false);
             setCountdownTime(remainingTime);
+        } else if (remainingTime === 1) {
+            fetchWinner();
+            setShowWinner(true);
         }
+    
+        // Update the countdown timer every second
+        const interval = setInterval(() => {
+            setCountdownTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+        }, 1000);
+    
+        return () => clearInterval(interval);
     }, [phase, remainingTime, countdownTime]);
 
     const fetchWinner = async () => {
         try {
-            const winnerResponse: GameAsset = await VoteApi.winner();
+            const winnerResponse: any = await VoteApi.winner();
             console.log("Winner fetched:", winnerResponse);
             // setWinner(winnerResponse);
         } catch (error) {
