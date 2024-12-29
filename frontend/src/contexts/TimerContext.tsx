@@ -49,7 +49,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     useEffect(() => {
         const timer = setInterval(() => {
             const now = Date.now();
-            const elapsed = Math.floor((now - startTime * 1000) / 1000);
+            const elapsed = Math.floor((now - startTime) / 1000);
 
             if (phase === 'propose' && elapsed >= PROPOSE_DURATION) {
                 nextPhase();

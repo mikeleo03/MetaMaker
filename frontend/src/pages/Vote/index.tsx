@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { Particles } from '@/components';
-import { Button } from "@/components/ui/button";
 import { useTimer } from '@/contexts/TimerContext';
 import { useWallet } from '@/contexts/WalletContext';
 import { VOTE_DURATION } from '@/constant';

@@ -249,7 +249,7 @@ const Propose: React.FC = () => {
                                         style={{ width: `${(remainingTime / PROPOSE_DURATION) * 100}%` }}
                                     ></div>
                                 </div>
-                                <div className="md:w-28 w-40 flex items-center text-white text-lg space-x-2">
+                                <div className="md:w-28 w-44 flex items-center text-white text-lg space-x-2">
                                     <span><LuAlarmClock /></span>
                                     <span>{formatTime(remainingTime)}</span>
                                 </div>
