@@ -33,7 +33,7 @@ router.get("/start-time", async (req, res) => {
   try {
     const startTime = await oracleGetStartTime();
     res.status(200).json({
-      startTime: startTime,
+      startTime,
     });
   } catch (error) {
     console.error("Error getting start time:", error);

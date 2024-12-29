@@ -13,7 +13,7 @@ import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
 import { GameAsset, AssetResponse, VoteRequest } from '@/types';
 import { convertGoogleDriveLink, hexToReadableString } from '@/utils';
-import VoteApi from '@/api/vote-api';
+import { VoteApi } from '@/api';
 
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";

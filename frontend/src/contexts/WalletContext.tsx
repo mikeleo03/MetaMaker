@@ -16,7 +16,6 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 const accounts = await window.ethereum.request({
                     method: "eth_requestAccounts",
                 });
-                console.log(accounts)
 
                 if (accounts.length == 0) {
                     alert("No authorized account found");

@@ -100,7 +100,6 @@ const Propose: React.FC = () => {
         setOnUpdate(true);
     
         try {
-            console.log(address);
             const formData = new FormData();
             formData.append("title", data.title);
             formData.append("proposer", address as string);

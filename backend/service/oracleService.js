@@ -74,7 +74,7 @@ async function oracleGetStartTime() {
     const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
 
     const startTime = await currentPatchContract.methods.startPatchTime().call();
-    return startTime;
+    return BigInt(startTime).toString(); 
   } catch (error) {
     console.error("Error getting start time:", error);
     throw new Error("Failed to get patch start time.");
