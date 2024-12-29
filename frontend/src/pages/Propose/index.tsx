@@ -19,7 +19,6 @@ import { LuAlarmClock } from "react-icons/lu";
 import { FaFileImage } from "react-icons/fa6";
 import { Trash2, Upload, Loader2 } from "lucide-react";
 
-import { ethers } from 'ethers';
 import { ProposeApi } from "@/api";
 
 const Propose: React.FC = () => {
@@ -30,21 +29,20 @@ const Propose: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchENSName = async () => {
+        const fetchAddress = async () => {
             if (account) {
                 try {
-                    const provider = new ethers.BrowserProvider(window.ethereum);
-                    await provider.send("eth_requestAccounts", []); 
-                    const signer = await provider.getSigner();
-                    const addressSigner = await signer.address;
-                    setAddress(addressSigner || null);
+                    // Directly set the account from the context
+                    setAddress(account);
                 } catch (error) {
-                    console.error("Error fetching ENS name:", error);
+                    console.error("Error fetching address or ENS name:", error);
                 }
+            } else {
+                setAddress(null);
             }
         };
-
-        fetchENSName();
+    
+        fetchAddress();
     }, [account]);
     
     useEffect(() => {
@@ -102,6 +100,7 @@ const Propose: React.FC = () => {
         setOnUpdate(true);
     
         try {
+            console.log(address);
             const formData = new FormData();
             formData.append("title", data.title);
             formData.append("proposer", address as string);
@@ -111,7 +110,7 @@ const Propose: React.FC = () => {
             await ProposeApi.add(formData);
             toast.success("Asset proposed successfully!");
         } catch (error: any) {
-            console.error("Course failed to be added:", error);
+            console.error("Asset failed to be proposed:", error);
             toast.error(
                 (error.response?.data as { message: string })?.message ||
                 "Server is unreachable. Please try again later."

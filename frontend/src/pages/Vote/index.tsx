@@ -3,53 +3,72 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { Particles } from '@/components';
+import { Button } from "@/components/ui/button";
 import { useTimer } from '@/contexts/TimerContext';
+import { useWallet } from '@/contexts/WalletContext';
 import { VOTE_DURATION } from '@/constant';
 
-import logoWhite from "@/assets/logos/logo.png";
+// import logoWhite from "@/assets/logos/logo.png";
 import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
+import { GameAsset, AssetResponse, VoteRequest } from '@/types';
+import { convertGoogleDriveLink, hexToReadableString } from '@/utils';
+import VoteApi from '@/api/vote-api';
 
-interface GameAsset {
-    id: number;
-    image: string;
-    title: string;
-    proposer: string;
-    description: string;
-}
-
-const gameAssets: GameAsset[] = [
-    {
-        id: 1,
-        image: logoWhite,
-        title: 'Warrior Blade',
-        proposer: 'Alex Johnson',
-        description: 'The Warrior Blade is a legendary weapon forged in the depths of Mount Tyrion. This razor-sharp blade is said to be imbued with the spirit of ancient warriors, granting its wielder unmatched strength and agility. With intricate runes etched along its edge, the blade emits a faint glow during combat, symbolizing its immense power.',
-    },
-    {
-        id: 2,
-        image: logoWhite,
-        title: 'Mystic Orb',
-        proposer: 'Sarah Lin',
-        description: 'The Mystic Orb is an enigmatic artifact pulsating with otherworldly energy. Crafted from an unknown crystalline substance, it radiates an ethereal glow and constantly shifts its color. Legends claim the orb can amplify magical abilities, allowing the user to manipulate the elements and foresee glimpses of the future.',
-    },
-    {
-        id: 3,
-        image: logoWhite,
-        title: 'Shadow Cloak',
-        proposer: 'David Kim',
-        description: 'The Shadow Cloak is a mysterious garment woven from the fabric of twilight. It grants its wearer the ability to vanish into shadows, moving unseen and unheard. The cloak is adorned with subtle patterns that shimmer faintly under moonlight, reflecting the quiet elegance of its elusive nature.',
-    },
-];
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
 const Vote: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [onUpdate, setOnUpdate] = useState(false);
     const [countdownTime, setCountdownTime] = useState<number>(0);
+    const [gameAssets, setGameAssets] = useState<GameAsset[]>([]);
     const [showWinner, setShowWinner] = useState(false);
     const [winner, setWinner] = useState<GameAsset | null>(null);
     const { phase, remainingTime } = useTimer();
+    const { account } = useWallet();
+    const [address, setAddress] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchAddress = async () => {
+            if (account) {
+                try {
+                    // Directly set the account from the context
+                    setAddress(account);
+                } catch (error) {
+                    console.error("Error fetching address or ENS name:", error);
+                }
+            } else {
+                setAddress(null);
+            }
+        };
+    
+        fetchAddress();
+    }, [account]);
+
+    useEffect(() => {
+        const fetchAssets = async () => {
+            try {
+                const assetsResponse: AssetResponse[] = await VoteApi.all();
+
+                // Converting to format
+                const assetClean: GameAsset[] = assetsResponse.map((asset, index) => ({
+                    id: index + 1, // Generating a unique ID
+                    image: convertGoogleDriveLink(asset.link),
+                    title: hexToReadableString(asset.name),
+                    proposer: asset.creator,
+                    description: asset.desc,
+                }));
+
+                setGameAssets(assetClean);
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+            }
+        };
+
+        fetchAssets();
+    }, []);
 
     useEffect(() => {
         if (phase !== 'vote') {
@@ -76,12 +95,36 @@ const Vote: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + gameAssets.length) % gameAssets.length);
     };
     
-    const voteAsset = () => {
-        setShowConfirmation(true);
-        setWinner(gameAssets[currentIndex]);
-        setTimeout(() => {
-            setShowConfirmation(false);
-        }, 2000);
+    const voteAsset = async () => {
+        if (!address) {
+            toast.error("Please log in first.");
+            return;
+        }
+
+        const payload: VoteRequest = {
+            proposer: address,
+            assetIdx: currentIndex
+        };
+
+        setOnUpdate(true);
+
+        // Submit the response
+        await VoteApi.vote(payload)
+            .then(() => {
+                toast.success("Your vote has been submitted!");
+            })
+            .catch((error) => {
+                console.error("Vote failed to be proposed:", error);
+                toast.error(
+                    (error.response?.data as { message: string })?.message ||
+                    "Server is unreachable. Please try again later."
+                );
+            })
+            .finally(() => {
+                setOnUpdate(false);
+            });
+
+        // setWinner(gameAssets[currentIndex]);
     };
 
     const formatTime = (seconds: number) => {
@@ -257,14 +300,14 @@ const Vote: React.FC = () => {
                     </button>
 
                     {/* Floating Asset */}
-                    <motion.img
+                    {currentAsset && <motion.img
                         src={currentAsset.image}
                         alt={currentAsset.title}
                         className="md:w-60 w-36 z-30 object-contain mx-8"
                         initial={{ y: 0 }}
                         animate={{ y: [0, -20, 0] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                    />
+                    />}
 
                     {/* Next Button */}
                     <button
@@ -276,34 +319,32 @@ const Vote: React.FC = () => {
                 </div>
 
                 {/* Glassmorphism Info Section */}
-                <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
-                    <h1 className="text-3xl font-bold mb-0">{currentAsset.title}</h1>
-                    <p className="mt-2">Proposed by: {currentAsset.proposer}</p>
-                    <p className="mt-2 md:text-sm text-gray-300">{currentAsset.description}</p>
-                </div>
+                {currentAsset && (
+                    <div className="md:absolute z-30 md:top-[125px] md:mt-0 mt-16 md:right-[100px] md:w-[300px] w-[300px] md:h-[350px] h-full overflow-y-auto bg-purple-500/20 border border-purple-500 backdrop-blur-md rounded-3xl p-6 text-white md:ml-8">
+                        <h1 className="text-3xl font-bold mb-0 break-words">{currentAsset.title}</h1>
+                        <p className="mt-2 break-words">Proposed by: {currentAsset.proposer}</p>
+                        <p className="mt-2 md:text-sm text-gray-300 break-words">{currentAsset.description}</p>
+                    </div>
+                )}
             </div>
 
             {/* Vote Button */}
             <div className="md:absolute md:bottom-10 z-30 md:right-8 md:mb-0 mb-10">
-                <button
+                <Button
                     onClick={voteAsset}
                     className="bg-gradient-to-b from-[#443173] to-[#6E5C99] text-white px-10 mr-8 p-2 text-xl font-semibold rounded-3xl transition-transform duration-300 transform hover:scale-105"
+                    disabled={gameAssets.length == 0 && onUpdate}
                 >
-                Vote
-                </button>
+                    {onUpdate ? (
+                        <>
+                            <Loader2 className="animate-spin inline-block mr-2" /> 
+                            Voting
+                        </>
+                    ) : (
+                        "Vote"
+                    )}
+                </Button>
             </div>
-
-            {/* Confirmation Message */}
-            {showConfirmation && (
-                <motion.div
-                    className="absolute bottom-8 text-white bg-green-500 px-4 py-2 rounded-lg"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                >
-                Your vote has been submitted!
-                </motion.div>
-            )}
 
             {/* Shine Animation */}
             <style>{`
