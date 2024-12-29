@@ -30,10 +30,11 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 // Determining the phase
                 const currentTime = Date.now();
                 console.log(currentTime);
-                if (startTimeParsed * 1000 <= currentTime && currentTime <= startTimeParsed * 1000 + PROPOSE_DURATION) {
+                console.log(startTimeParsed * 1000 + PROPOSE_DURATION * 1000);
+                if (currentTime <= (startTimeParsed + PROPOSE_DURATION) * 1000) {
                     setPhase('propose');
                 } else {
-                    setStartTime(startTimeParsed * 1000 + PROPOSE_DURATION);
+                    setStartTime((startTimeParsed + PROPOSE_DURATION) * 1000);
                     setPhase('vote');
                 }
             } catch (error) {
@@ -48,7 +49,7 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     useEffect(() => {
         const timer = setInterval(() => {
             const now = Date.now();
-            const elapsed = Math.floor((now - startTime) / 1000);
+            const elapsed = Math.floor((now - startTime * 1000) / 1000);
 
             if (phase === 'propose' && elapsed >= PROPOSE_DURATION) {
                 nextPhase();
