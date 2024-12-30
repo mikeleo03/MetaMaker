@@ -17,9 +17,6 @@ const privateKey = process.env.PRIVATE_KEY;
 
 async function oracleCreateNewPatch() {
   try {
-    const account = web3.eth.accounts.privateKeyToAccount(`0x${privateKey}`);
-    web3.eth.accounts.wallet.add(account);
-
     const creator = web3.eth.accounts.privateKeyToAccount(`0x${process.env.CREATOR_KEY}`);
     const balance = await web3.eth.getBalance(creator.address);
     if (balance <= 0) {
