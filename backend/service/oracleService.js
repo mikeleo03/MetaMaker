@@ -68,7 +68,7 @@ async function oracleGetStartTime() {
 
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
-    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[currPatchIndex]);
 
     const startTime = await currentPatchContract.methods.startPatchTime().call();
     return BigInt(startTime).toString(); 
@@ -91,7 +91,7 @@ async function oracleUploadAsset(imageLink, assetName, address, description) {
     
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
-    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[currPatchIndex]);
     
     const currentTime = Math.floor(Date.now() / 1000);
     const assetNameHex = web3.utils.leftPad(web3.utils.asciiToHex(assetName), 64);
@@ -128,7 +128,7 @@ async function oracleGetAllAssets() {
     }
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
-    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[currPatchIndex]);
 
     const getAllAssetsTx = await currentPatchContract.methods.getAllAssets().call();
     return getAllAssetsTx;
@@ -142,7 +142,7 @@ async function oracleVote(address, assetIdx) {
   try {
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
-    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[currPatchIndex]);
     const currentTimeSecs = Math.floor(Date.now() / 1000);
 
     const voteTx = await currentPatchContract.methods.vote(address, assetIdx, currentTimeSecs).call();
@@ -158,7 +158,7 @@ async function oracleDeclareWinner() {
   try {
     const currPatchIndex = await contract.methods.currPatch().call();
     const currentPatchAddress = await contract.methods.getAllPatches().call(currPatchIndex);
-    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[0]);
+    const currentPatchContract = new web3.eth.Contract(patchABI, currentPatchAddress[currPatchIndex]);
     const currentTimeSecs = Math.floor(Date.now() / 1000);
 
     const declareWinnerTx = await currentPatchContract.methods.declareWinner(currentTimeSecs).call();
