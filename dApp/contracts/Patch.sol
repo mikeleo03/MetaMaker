@@ -32,9 +32,9 @@ contract Patch {
     event Voted(address _voter, uint _assetIdx);
     event Uploaded(address _uploader, Asset _asset);
 
-    constructor(uint256 _patchId) {
+    constructor(uint256 _patchId, uint256 _currTime) {
         patchId = _patchId;
-        startPatchTime = block.timestamp;
+        startPatchTime = _currTime;
         startVoteTime = startPatchTime + UPLOAD_PERIOD;
         endPatchTime = startVoteTime + VOTING_PERIOD;
     }

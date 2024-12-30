@@ -13,11 +13,11 @@ contract PatchHistory {
         creator = msg.sender;
     }
 
-    function createNewPatch(uint256 currTime) public {
+    function createNewPatch(uint256 _currTime) public {
         require(msg.sender == creator, "Unauthorized entity trying to create a patch");
-        require(allPatches.length == 0 || currTime > allPatches[currPatch].endPatchTime(), "Current patch has not ended");
+        require(allPatches.length == 0 || _currTime > allPatches[currPatch].endPatchTime(), "Current patch has not ended");
         currPatch = allPatches.length;
-        Patch newPatch = new Patch(currPatch);
+        Patch newPatch = new Patch(currPatch, _currTime);
         allPatches.push(newPatch);
     }
 
