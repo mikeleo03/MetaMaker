@@ -57,7 +57,7 @@ router.get("/win", async (req, res) => {
 
         await deleteAllFiles();
 
-        fs.unlinkSync(tempDownloadPath);
+        // fs.unlinkSync(tempDownloadPath);
 
         const formattedWinner = Object.entries(winner).reduce((acc, [key, value]) => {
           acc[key] = typeof value === "bigint" ? value.toString() : value;
