@@ -232,11 +232,9 @@ Here's MetaMaker's features and its interface.
 4. The MetaMaker dApp should now be running on [http://127.0.0.1:7545](http://127.0.0.1:7545).
 
 ## 📌 Report and Demo
-Here's the link for the project report
-Project Report Link
+Access the **Project Report**:  [Project Report Link](/docs/Project%20Report%20Blockchain%20-%20MetaMaker.pdf)
 
-Here's the link for the video demo
-Video Demo Link
+Watch the **Video Demo**: [Video Demo Link](https://youtu.be/aDZGzmtYYbQ)
 
 ## 👏 Contributors
 |SID|Contributor|
