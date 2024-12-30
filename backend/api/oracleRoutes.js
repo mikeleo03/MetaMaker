@@ -61,6 +61,7 @@ router.get("/win", async (req, res) => {
 
         res.status(200).json({
             message: "Winner file uploaded to GitHub.",
+            winner: winner,
         });
     } catch (error) {
         console.error("Error processing winner:", error);
