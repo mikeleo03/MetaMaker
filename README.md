@@ -1,7 +1,7 @@
 <br>
 <div align="center">
     <div >
-        <img height="150px" src="./img/logo.png" alt="MetaMaker Logo"/>
+        <img height="100px" src="./img/logo2.png" alt="MetaMaker Logo"/>
     </div>
     <div>
             <h3><b>MetaMaker</b></h3>
