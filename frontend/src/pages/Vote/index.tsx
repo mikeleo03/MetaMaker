@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -12,7 +12,7 @@ import podium from "@/assets/images/podium2.jpg";
 import { LuAlarmClock } from "react-icons/lu";
 import { GameAsset, AssetResponse, VoteRequest } from '@/types';
 import { convertGoogleDriveLink, hexToReadableString, formatTime } from '@/utils';
-import { VoteApi } from '@/api';
+import { VoteApi, PhaseApi } from '@/api';
 
 import { toast } from "react-toastify";
 import { Loader2 } from "lucide-react";
@@ -28,12 +28,12 @@ const Vote: React.FC = () => {
     const { account } = useWallet();
     const [address, setAddress] = useState<string | null>(null);
     const navigate = useNavigate();
+    const hasFetchedWinner = useRef(false);
 
     useEffect(() => {
         const fetchAddress = async () => {
             if (account) {
                 try {
-                    // Directly set the account from the context
                     setAddress(account);
                 } catch (error) {
                     console.error("Error fetching address or ENS name:", error);
@@ -42,7 +42,7 @@ const Vote: React.FC = () => {
                 setAddress(null);
             }
         };
-    
+
         fetchAddress();
     }, [account]);
 
@@ -51,9 +51,8 @@ const Vote: React.FC = () => {
             try {
                 const assetsResponse: AssetResponse[] = await VoteApi.all();
 
-                // Converting to format
                 const assetClean: GameAsset[] = assetsResponse.map((asset, index) => ({
-                    id: index + 1, // Generating a unique ID
+                    id: index + 1,
                     image: convertGoogleDriveLink(asset.link),
                     title: hexToReadableString(asset.name),
                     proposer: asset.creator,
@@ -62,7 +61,7 @@ const Vote: React.FC = () => {
 
                 setGameAssets(assetClean);
             } catch (error) {
-                console.error('Failed to fetch data:', error);
+                console.error("Failed to fetch data:", error);
             }
         };
 
@@ -73,24 +72,36 @@ const Vote: React.FC = () => {
         if (phase === 'vote') {
             setShowWinner(false);
             setCountdownTime(remainingTime);
-        } else if (remainingTime === 1) {
+            hasFetchedWinner.current = false;
+        } else if (!hasFetchedWinner.current) {
             fetchWinner();
             setShowWinner(true);
+            hasFetchedWinner.current = true;
         }
-    
-        // Update the countdown timer every second
+
         const interval = setInterval(() => {
             setCountdownTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
         }, 1000);
-    
+
         return () => clearInterval(interval);
-    }, [phase, remainingTime, countdownTime]);
+    }, [phase, remainingTime]);
 
     const fetchWinner = async () => {
         try {
-            const winnerResponse: any = await VoteApi.winner();
+            const winnerResponse: { message: string; winner: AssetResponse } = await VoteApi.winner();
             console.log("Winner fetched:", winnerResponse);
-            // setWinner(winnerResponse);
+
+            const assetWinner: GameAsset = {
+                id: 0,
+                image: convertGoogleDriveLink(winnerResponse.winner.link),
+                title: hexToReadableString(winnerResponse.winner.name),
+                proposer: winnerResponse.winner.creator,
+                description: winnerResponse.winner.desc,
+            };
+            setWinner(assetWinner);
+
+            const patchResponse = await PhaseApi.patch();
+            console.log("Patch response:", patchResponse);
         } catch (error) {
             console.error("Failed to fetch winner:", error);
         }
@@ -99,15 +110,15 @@ const Vote: React.FC = () => {
     useEffect(() => {
         setCountdownTime(remainingTime);
     }, [remainingTime]);
-    
+
     const nextAsset = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % gameAssets.length);
     };
-    
+
     const prevAsset = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + gameAssets.length) % gameAssets.length);
     };
-    
+
     const voteAsset = async () => {
         if (!address) {
             toast.error("Please log in first.");
@@ -116,42 +127,39 @@ const Vote: React.FC = () => {
 
         const payload: VoteRequest = {
             proposer: address,
-            assetIdx: currentIndex
+            assetIdx: currentIndex,
         };
         console.log(payload);
 
         setOnUpdate(true);
 
-        // Submit the response
-        await VoteApi.vote(payload)
-            .then(() => {
-                toast.success("Your vote has been submitted!");
-            })
-            .catch((error) => {
-                console.error("Vote failed to be proposed:", error);
-                toast.error(
-                    (error.response?.data as { message: string })?.message ||
+        try {
+            await VoteApi.vote(payload);
+            toast.success("Your vote has been submitted!");
+        } catch (error: any) {
+            console.error("Vote failed to be proposed:", error);
+            toast.error(
+                (error.response?.data as { message: string })?.message ||
                     "Server is unreachable. Please try again later."
-                );
-            })
-            .finally(() => {
-                setOnUpdate(false);
-            });
-    };    
+            );
+        } finally {
+            setOnUpdate(false);
+        }
+    };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === 'ArrowLeft') {
+        if (event.key === "ArrowLeft") {
             prevAsset();
-        } else if (event.key === 'ArrowRight') {
+        } else if (event.key === "ArrowRight") {
             nextAsset();
         }
     };
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
@@ -377,7 +385,7 @@ const Vote: React.FC = () => {
             `}</style>
 
             {/* Particles */}
-            <Particles />
+            {/* <Particles /> */}
         </div>
     );
 };

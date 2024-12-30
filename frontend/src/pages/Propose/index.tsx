@@ -444,7 +444,7 @@ const Propose: React.FC = () => {
             `}</style>
 
             {/* Particles */}
-            <Particles />
+            {/* <Particles /> */}
         </main>
       );
 };

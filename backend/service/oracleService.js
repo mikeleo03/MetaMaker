@@ -162,8 +162,6 @@ async function oracleDeclareWinner() {
     const currentTimeSecs = Math.floor(Date.now() / 1000);
 
     const declareWinnerTx = await currentPatchContract.methods.declareWinner(currentTimeSecs).call();
-    const res = await oracleCreateNewPatch();
-    console.log(res);
     
     return declareWinnerTx;
   } catch (error) {

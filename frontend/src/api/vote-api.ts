@@ -30,9 +30,9 @@ class VoteApi {
         }
     }
 
-    static async winner(): Promise<any> {
+    static async winner(): Promise<{ message: string, winner: AssetResponse }> {
         try {
-            const response = await this.axios.get<any>("/win");
+            const response = await this.axios.get<{ message: string, winner: AssetResponse }>("/win");
             return response.data;
         } catch (error) {
             throw error;
