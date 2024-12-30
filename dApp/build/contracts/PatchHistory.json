@@ -23,8 +23,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -37,8 +36,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -64,8 +62,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"allPatches\",\"outputs\":[{\"internalType\":\"contract Patch\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_currTime\",\"type\":\"uint256\"}],\"name\":\"createNewPatch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currPatch\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllPatches\",\"outputs\":[{\"internalType\":\"contract Patch[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/PatchHistory.sol\":\"PatchHistory\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Patch.sol\":{\"keccak256\":\"0x2ef7fae0c291571b5711e5b324c1111ff769a035b2a3017d8686f1bc0574d16b\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://eb979f510e4f3ba333ed39e5dee149581b0ffc0dd263526ea79dd0cc0b599e06\",\"dweb:/ipfs/QmUeULU4gDnNeYoPNike8air1Akqtafv3FMHTgspABfBLc\"]},\"project:/contracts/PatchHistory.sol\":{\"keccak256\":\"0x0ca73efa3e6157e9b376160a1b290f582a77a9a92bd970992c936447b9e0a849\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://c25cb32bd8529038294121c176aceee377942d6eed1326fb26caacc9cc8d5033\",\"dweb:/ipfs/QmcaiAWrPvix8YrH7AmMkcwnMu1z24mqgG4qA25eZkLWhX\"]}},\"version\":1}",
@@ -4510,8 +4507,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-30T11:55:29.173Z",
-  "networkType": "ethereum",
+  "updatedAt": "2024-12-30T16:01:58.216Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

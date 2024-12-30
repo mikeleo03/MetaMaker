@@ -19,8 +19,9 @@ MetaMaker is a blockchain-based decentralized game development platform that all
 - [General Information](#general-information)
 - [Tech Stacks and Platforms](#tech-stacks-and-platforms)
 - [High Level Design](#high-level-design)
-- [Main Features](#main-features)
+- [Pages and Features](#pages-and-features)
 - [How to Run](#how-to-run)
+- [Report and Demo](#report-and-demo)
 - [Contributors](#contributors)
 
 ## 📢 General Information
@@ -178,6 +179,64 @@ Here's MetaMaker's features and its interface.
         <td width="1%" align="center">Some Decoration :D</td>
     </tr>
 </table>
+
+## ⚙️ &nbsp;How to Run
+#### General Project
+1. **Clone the repository** from the terminal using the following command:
+    ```bash
+    $ git clone https://github.com/mikeleo03/MetaMaker.git
+    ```
+2. **Go to the each directory** one by one (frontend, backend, dApp), by using this command:
+    ```bash
+    $ cd <dir>
+    ```
+    Using 3 different terminals is recommended.
+
+#### Frontend Project
+1. **Install all the required dependencies** using this following command in the project frontend directory
+   ```bash
+   $ npm install
+   ```
+2. **Run the frontend** using this following command
+   ```bash
+   $ npm run dev
+   ```
+3. The MetaMaker frontend should now be running. You can check the server by opening [http://localhost:3000](http://localhost:3000) in your web browser.
+
+#### Backend Project
+1. **Install all the required dependencies** using this following command in the project backend directory
+   ```bash
+   $ npm install
+   ```
+2. **Create a `.env` file** inside the repository directory using the `env.example` file as the template.
+3. **Run the server** using the following command. Make sure you have Docker Desktop installed on your device:
+    ```bash
+    $ npm run dev
+    ```
+4. The MetaMaker backend server should now be running. You can check the server by opening [http://localhost:5000](http://localhost:5000) in your web browser.
+
+#### dApp Project
+1. Ensure that Ganache is installed on your device. For more information, visit [this link](https://archive.trufflesuite.com/ganache/).
+2. **Build the smart contract** using this following command
+   ```bash
+   $ truffle build
+   ```
+3. **Deploy the smart contract on private chain** using this following command
+   ```bash
+   $ truffle deploy
+   ```
+3. Finally, do migration using this command
+   ```bash
+   $ migrate
+   ```
+4. The MetaMaker dApp should now be running on [http://127.0.0.1:7545](http://127.0.0.1:7545).
+
+## 📌 Report and Demo
+Here's the link for the project report
+Project Report Link
+
+Here's the link for the video demo
+Video Demo Link
 
 ## 👏 Contributors
 |SID|Contributor|
