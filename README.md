@@ -22,6 +22,7 @@ MetaMaker is a blockchain-based decentralized game development platform that all
 - [Pages and Features](#pages-and-features)
 - [How to Run](#how-to-run)
 - [Report and Demo](#report-and-demo)
+- [Assets](#assets)
 - [Contributors](#contributors)
 
 ## 📢 General Information
@@ -180,8 +181,8 @@ Here's MetaMaker's features and its interface.
     </tr>
 </table>
 
-## ⚙️ &nbsp;How to Run
-#### General Project
+## ⚙️ How to Run
+### General Project
 1. **Clone the repository** from the terminal using the following command:
     ```bash
     $ git clone https://github.com/mikeleo03/MetaMaker.git
@@ -192,7 +193,7 @@ Here's MetaMaker's features and its interface.
     ```
     Using 3 different terminals is recommended.
 
-#### Frontend Project
+### Frontend Project
 1. **Install all the required dependencies** using this following command in the project frontend directory
    ```bash
    $ npm install
@@ -203,7 +204,7 @@ Here's MetaMaker's features and its interface.
    ```
 3. The MetaMaker frontend should now be running. You can check the server by opening [http://localhost:3000](http://localhost:3000) in your web browser.
 
-#### Backend Project
+### Backend Project
 1. **Install all the required dependencies** using this following command in the project backend directory
    ```bash
    $ npm install
@@ -215,7 +216,7 @@ Here's MetaMaker's features and its interface.
     ```
 4. The MetaMaker backend server should now be running. You can check the server by opening [http://localhost:5000](http://localhost:5000) in your web browser.
 
-#### dApp Project
+### dApp Project
 1. Ensure that Ganache is installed on your device. For more information, visit [this link](https://archive.trufflesuite.com/ganache/).
 2. **Build the smart contract** using this following command
    ```bash
@@ -235,6 +236,11 @@ Here's MetaMaker's features and its interface.
 Access the **Project Report**:  [Project Report Link](/docs/Project%20Report%20Blockchain%20-%20MetaMaker.pdf)
 
 Watch the **Video Demo**: [Video Demo Link](https://youtu.be/aDZGzmtYYbQ)
+
+## 📂 Assets
+Access the MetaMaker **Google Drive Assets**: [View Google Drive Assets](https://drive.google.com/drive/folders/1YkGAarrMd2N2Mq3jw0PHrRc9eqUql9Fj)
+
+Explore the **GitHub Repository Assets**: [View GitHub Repository](https://github.com/Salomo309/Game-Assets)
 
 ## 👏 Contributors
 |SID|Contributor|
