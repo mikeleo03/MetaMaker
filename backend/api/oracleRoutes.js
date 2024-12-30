@@ -59,9 +59,14 @@ router.get("/win", async (req, res) => {
 
         fs.unlinkSync(tempDownloadPath);
 
+        const formattedWinner = Object.entries(winner).reduce((acc, [key, value]) => {
+          acc[key] = typeof value === "bigint" ? value.toString() : value;
+          return acc;
+        }, {});
+
         res.status(200).json({
             message: "Winner file uploaded to GitHub.",
-            winner: winner,
+            winner: formattedWinner,
         });
     } catch (error) {
         console.error("Error processing winner:", error);
