@@ -58,7 +58,7 @@ contract Patch {
         require(!participants[_voter].hasVoted, "Uploader has voted for an asset this patch");
         require(!(allAssets[_assetIdx].creator == _voter), "Voter can't vote for their own asset");
         require(_assetIdx >= 0 && _assetIdx < allAssets.length, "Index invalid");
-        require(_voter == msg.sender, "voter and message sender not the same");
+        // require(_voter == msg.sender, "voter and message sender not the same");
         participants[_voter].hasVoted = true;
         allAssets[_assetIdx].voteCount += 1;
         emit Voted(_voter, _assetIdx);

@@ -29,6 +29,15 @@ class VoteApi {
             throw error;
         }
     }
+
+    static async winner(): Promise<any> {
+        try {
+            const response = await this.axios.get<any>("/win");
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default VoteApi;
